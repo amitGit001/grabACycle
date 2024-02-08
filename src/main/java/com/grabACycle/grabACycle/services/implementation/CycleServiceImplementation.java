@@ -4,6 +4,10 @@ import com.grabACycle.grabACycle.dao.CycleRepository;
 import com.grabACycle.grabACycle.entity.Cycle;
 import com.grabACycle.grabACycle.services.CycleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,9 +40,20 @@ public class CycleServiceImplementation implements CycleService {
     }
 
     @Override
-    public Optional<Cycle> fetchCycleById(int cycleId)
+    public Cycle fetchCycleById(int cycleId)
     {
-        return cycleRepository.findById(cycleId);
+        Optional<Cycle> optional=cycleRepository.findById(cycleId);
+
+        Cycle cycle=null;
+        if(optional.isPresent())
+        {
+            cycle=optional.get();
+        }
+        else{
+            throw new RuntimeException("Cycle not found for id:"+cycleId);
+        }
+
+        return cycle;
     }
 
     @Override
@@ -69,8 +84,18 @@ public class CycleServiceImplementation implements CycleService {
     }
 
     @Override
-    public void deleteCycle(int cycleId)
+    public void deleteCycleById(int cycleId)
     {
-        cycleRepository.deleteById(cycleId);
+       cycleRepository.deleteById(cycleId);
+    }
+
+    @Override
+    public Page<Cycle> findPaginated(int pageNo, int pageSize, String sortField, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
+                Sort.by(sortField).descending();
+
+        Pageable pageable= PageRequest.of(pageNo-1, pageSize, sort);
+
+        return cycleRepository.findAll(pageable);
     }
 }

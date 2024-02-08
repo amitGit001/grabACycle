@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Add a Cycle</title>
+</head>
+<body>
+<div>
+
+    <div th:replace="~{fragments/header :: header}"></div>
+    <form th:action="@{/createCycle}" th:object="${cycle}" method="POST">
+        <input type="text" th:field="*{name}" placeholder="Cycle Name">
+        <input type="text" th:field="*{model}" placeholder="Cycle Model">
+        <input type="text" th:field="*{type}" placeholder="Cycle Type">
+
+        <button type="submit">Save</button>
+    </form>
+
+    <a th:href="@{/}"> Home</a>
+
+
+    <div th:replace="fragments/footer :: footer"></div>
+</div>
+</body>
+</html>

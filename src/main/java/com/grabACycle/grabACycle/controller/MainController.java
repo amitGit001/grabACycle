@@ -1,4 +1,4 @@
-package com.grabACycle.grabACycle.web;
+package com.grabACycle.grabACycle.controller;
 
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -25,11 +25,11 @@ public class MainController {
         return "login";
     }
 
-    @GetMapping("/")
-    public String home()
-    {
-        return "home";
-    }
+//    @GetMapping("/")
+//    public String home()
+//    {
+//        return "home";
+//    }
 
 
 }

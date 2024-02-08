@@ -1,4 +1,4 @@
-package com.grabACycle.grabACycle.web;
+package com.grabACycle.grabACycle.controller;
 
 
 import com.grabACycle.grabACycle.services.UserService;
