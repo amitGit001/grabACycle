@@ -1,53 +1,110 @@
 package com.grabACycle.grabACycle.controller;
 
+
 import com.grabACycle.grabACycle.entity.Cycle;
 import com.grabACycle.grabACycle.services.CycleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
-@RestController
-public class CycleController {
+@Controller
+public class CycleController
+{
 
-
-    @Autowired
     private CycleService cycleService;
 
-    @PostMapping("/cycle")
-    public Cycle createCycle(@RequestBody Cycle cycle)
+    @Autowired
+    public CycleController(CycleService cycleService)
     {
-        return cycleService.createCycle(cycle);
+        this.cycleService=cycleService;
     }
 
-    @GetMapping("/cycle")
-    public List<Cycle> getAllCycles()
+
+    // Display list of cycles
+    @GetMapping("/")
+    public String viewHomePage(Model model)
     {
-        return cycleService.fetchCycles();
+        return findPaginated(1, "id","asc",model); // default page number=1
+    }
+    @GetMapping("/page/{pageNo}")
+    public String findPaginated(@PathVariable(value="pageNo") int pageNo, @RequestParam("sortField")  String sortField, @RequestParam("sortDir") String sortDir, Model model)
+    {
+        int pageSize=5; // we can take the pagesize from front end as well using path variable, or declare the size in application.properties
+
+        Page<Cycle> page=cycleService.findPaginated(pageNo, pageSize,sortField, sortDir);
+
+        List<Cycle> listCycles=page.getContent();
+
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("totalItems", page.getTotalElements());
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+        model.addAttribute("listCycles", listCycles);
+
+        return "home";
+
     }
 
-    @GetMapping("/cycle/{cycleId}")
-    public Optional<Cycle> getCycleById(@PathVariable int cycleId)
+
+
+    // Add a new Cycle form
+    @GetMapping("/showNewCycleForm")
+    public String showNewCycleForm(Model model)
     {
-        return cycleService.fetchCycleById(cycleId);
+        // create model attribute to bind form data
+        Cycle cycle=new Cycle();
+        model.addAttribute("cycle", cycle); // thymleaf template will access this empty cycle object for binding form data
+        return "add_cycle";
     }
 
-    @PutMapping("/cycle")
-    public Cycle updateCycle(@RequestBody Cycle cycle)
+    @PostMapping("/createCycle")
+    public String saveCycle(@ModelAttribute("cycle") Cycle cycle)
     {
-        return cycleService.updateCycle(cycle);
+        // save cycle to database
+        cycleService.createCycle(cycle);
+        return "redirect:/";
     }
 
-    @PatchMapping("/cycle/{cycleId}")
-    public Cycle updateCycleById(@PathVariable int cycleId, @PathVariable Cycle cycle)
+
+
+    // Update cycle form
+    @GetMapping("/showFormForUpdate/{id}")
+    public String showFormForUpdate(@PathVariable int id, Model model)
     {
-        return cycleService.updateCycleById(cycleId, cycle);
+        // get cycle from the service layer
+        Cycle cycle= cycleService.fetchCycleById(id);
+
+        // set cycle as a model attribute to pre-populate the form data
+        model.addAttribute("cycle", cycle);
+
+        return "update_cycle";
+
     }
 
-    @DeleteMapping("/cycle/{cycleId}")
-    public void deleteCycle(@PathVariable int cycleId)
+
+    // Delete Cycle
+    @GetMapping("/deleteCycle/{id}")
+    @ResponseBody
+    public List<Cycle> deleteCycle(@PathVariable(value="id") int cycleId, @RequestParam("page") int pageNo, @RequestParam("sortField") String sortField, @RequestParam("sortDir") String sortDir)
     {
-        cycleService.deleteCycle(cycleId);
+
+        // call delete cycle method
+        cycleService.deleteCycleById(cycleId);
+
+        // return the updated page
+        int pageSize=5; // we can take the pagesize from front end as well using path variable, or declare the size in application.properties
+
+        Page<Cycle> page=cycleService.findPaginated(pageNo, pageSize,sortField, sortDir);
+
+        List<Cycle> listCycles=page.getContent();
+
+        return listCycles;
     }
+
 }

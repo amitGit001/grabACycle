@@ -4,18 +4,28 @@ import com.grabACycle.grabACycle.dao.CycleRepository;
 import com.grabACycle.grabACycle.entity.Cycle;
 import com.grabACycle.grabACycle.services.CycleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@CacheConfig(cacheNames = {"cycle"})
 public class CycleServiceImplementation implements CycleService {
 
     @Autowired
     private CycleRepository cycleRepository;
 
     @Override
+    @CachePut(cacheNames = "cycle")
     public Cycle createCycle(Cycle cycle)
     {
         Cycle tempCycle = new Cycle();
@@ -30,18 +40,32 @@ public class CycleServiceImplementation implements CycleService {
     }
 
     @Override
+    @Cacheable(cacheNames = "cycle")
     public List<Cycle> fetchCycles()
     {
         return cycleRepository.findAll();
     }
 
     @Override
-    public Optional<Cycle> fetchCycleById(int cycleId)
+    @Cacheable(cacheNames = "cycle",unless="#result == null")
+    public Cycle fetchCycleById(int cycleId)
     {
-        return cycleRepository.findById(cycleId);
+        Optional<Cycle> optional=cycleRepository.findById(cycleId);
+
+        Cycle cycle=null;
+        if(optional.isPresent())
+        {
+            cycle=optional.get();
+        }
+        else{
+            throw new RuntimeException("Cycle not found for id:"+cycleId);
+        }
+
+        return cycle;
     }
 
     @Override
+    @CachePut(cacheNames = "cycle")
     public Cycle updateCycle(Cycle cycle)
     {
         Cycle tempCycle = new Cycle();
@@ -69,8 +93,19 @@ public class CycleServiceImplementation implements CycleService {
     }
 
     @Override
-    public void deleteCycle(int cycleId)
+    @CacheEvict(cacheNames = "user", allEntries = true)
+    public void deleteCycleById(int cycleId)
     {
-        cycleRepository.deleteById(cycleId);
+       cycleRepository.deleteById(cycleId);
+    }
+
+    @Override
+    public Page<Cycle> findPaginated(int pageNo, int pageSize, String sortField, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
+                Sort.by(sortField).descending();
+
+        Pageable pageable= PageRequest.of(pageNo-1, pageSize, sort);
+
+        return cycleRepository.findAll(pageable);
     }
 }

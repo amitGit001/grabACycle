@@ -1,6 +1,7 @@
 package com.grabACycle.grabACycle.services;
 
 import com.grabACycle.grabACycle.entity.Cycle;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,11 +12,13 @@ public interface CycleService {
 
     List<Cycle> fetchCycles();
 
-    Optional<Cycle> fetchCycleById(int cycleId);
+    Cycle fetchCycleById(int cycleId);
 
     Cycle updateCycle(Cycle cycle);
 
     Cycle updateCycleById(int cycleId, Cycle cycle);
 
-    void deleteCycle(int cycleId);
+    void deleteCycleById(int cycleId);
+
+    Page<Cycle> findPaginated(int pageNo, int pageSize, String sortField, String sortDir);
 }

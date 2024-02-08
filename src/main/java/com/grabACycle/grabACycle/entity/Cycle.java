@@ -16,7 +16,7 @@ import org.hibernate.annotations.ColumnDefault;
 public class Cycle {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "name", nullable = false)
@@ -43,6 +43,10 @@ public class Cycle {
         this.model = model;
         this.type = type;
         this.bookingStatus = bookingStatus;
+    }
+
+    public Cycle() {
+
     }
 
     public int getId() {
