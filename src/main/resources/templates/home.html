@@ -95,7 +95,8 @@
             <td th:text="${cycle.bookingStatus}"></td>
 
             <td sec:authorize="hasRole('ROLE_ADMIN')" ><a  th:href="@{/showFormForUpdate/{id}(id=${cycle.id})}">Update</a>
-                <button th:onclick="'deleteCycleById(' + ${cycle.id} + ')'">Delete</button>
+                <button th:attr="data-cycle-id=${cycle.id}, data-current-page=${currentPage}, data-sort-field=${sortField}, data-sort-dir=${sortDir}" onclick="deleteCycleById(this)"
+                >Delete</button>
 <!--                <a  th:href="@{/deleteCycle/{id}(id=${cycle.id})}">Delete</a>-->
             </td>
         </tr>

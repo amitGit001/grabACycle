@@ -51,6 +51,8 @@ public class CycleController
 
     }
 
+
+
     // Add a new Cycle form
     @GetMapping("/showNewCycleForm")
     public String showNewCycleForm(Model model)
@@ -89,13 +91,20 @@ public class CycleController
     // Delete Cycle
     @GetMapping("/deleteCycle/{id}")
     @ResponseBody
-    public String deleteCycle(@PathVariable int id)
+    public List<Cycle> deleteCycle(@PathVariable(value="id") int cycleId, @RequestParam("page") int pageNo, @RequestParam("sortField") String sortField, @RequestParam("sortDir") String sortDir)
     {
 
         // call delete cycle method
-        cycleService.deleteCycleById(id);
+        cycleService.deleteCycleById(cycleId);
 
-        return "true";
+        // return the updated page
+        int pageSize=5; // we can take the pagesize from front end as well using path variable, or declare the size in application.properties
+
+        Page<Cycle> page=cycleService.findPaginated(pageNo, pageSize,sortField, sortDir);
+
+        List<Cycle> listCycles=page.getContent();
+
+        return listCycles;
     }
 
 }
