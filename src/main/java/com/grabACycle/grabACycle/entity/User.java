@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.Date;
 
 @Data
-@NoArgsConstructor
+//@NoArgsConstructor
 @Entity
 @Table(name = "User")
 public class User {
@@ -48,6 +48,10 @@ public class User {
         this.password = password;
         this.dob = dob;
         this.roles = roles;
+    }
+
+    public User() {
+
     }
 
     public int getId() {
