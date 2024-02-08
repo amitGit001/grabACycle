@@ -86,7 +86,7 @@
             <th sec:authorize="hasRole('ROLE_ADMIN')" >Actions</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody id="cycles-list-table">
         <tr th:each="cycle, cycleInfo : ${listCycles}"  th:id="${cycle.id}">
             <td th:text="${cycle.id}"></td>
             <td th:text="${cycle.name}"></td>
@@ -97,20 +97,22 @@
             <td sec:authorize="hasRole('ROLE_ADMIN')" ><a  th:href="@{/showFormForUpdate/{id}(id=${cycle.id})}">Update</a>
                 <button th:attr="data-cycle-id=${cycle.id}, data-current-page=${currentPage}, data-sort-field=${sortField}, data-sort-dir=${sortDir}" onclick="deleteCycleById(this)"
                 >Delete</button>
-<!--                <a  th:href="@{/deleteCycle/{id}(id=${cycle.id})}">Delete</a>-->
+
             </td>
         </tr>
         </tbody>
     </table>
 
-    <div th:if="${totalPages > 1}">
-        <div class="row col-sm-10">
-            <div class="col-sm-2">
-                Total Rows: [[${totalItems}]]
-            </div>
-            <div class="col-sm-1">
-                <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+<!--    Pagination -->
 
+    <div th:if="${totalPages > 1}">
+        <div>
+            Total Rows:
+            <span id="total-items-data">
+                [[${totalItems}]]
+            </span>
+            <div>
+                <span th:each="i: ${#numbers.sequence(1, totalPages)}">
 
                     <a th:if="${currentPage != i}" th:href="@{'/page/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
 
