@@ -45,6 +45,10 @@ public class Cycle {
         this.bookingStatus = bookingStatus;
     }
 
+    public Cycle() {
+
+    }
+
     public int getId() {
         return id;
     }

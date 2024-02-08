@@ -4,6 +4,10 @@ import com.grabACycle.grabACycle.dao.CycleRepository;
 import com.grabACycle.grabACycle.entity.Cycle;
 import com.grabACycle.grabACycle.services.CycleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,12 +18,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@CacheConfig(cacheNames = {"cycle"})
 public class CycleServiceImplementation implements CycleService {
 
     @Autowired
     private CycleRepository cycleRepository;
 
     @Override
+    @CachePut(cacheNames = "cycle")
     public Cycle createCycle(Cycle cycle)
     {
         Cycle tempCycle = new Cycle();
@@ -34,12 +40,14 @@ public class CycleServiceImplementation implements CycleService {
     }
 
     @Override
+    @Cacheable(cacheNames = "cycle")
     public List<Cycle> fetchCycles()
     {
         return cycleRepository.findAll();
     }
 
     @Override
+    @Cacheable(cacheNames = "cycle",unless="#result == null")
     public Cycle fetchCycleById(int cycleId)
     {
         Optional<Cycle> optional=cycleRepository.findById(cycleId);
@@ -57,6 +65,7 @@ public class CycleServiceImplementation implements CycleService {
     }
 
     @Override
+    @CachePut(cacheNames = "cycle")
     public Cycle updateCycle(Cycle cycle)
     {
         Cycle tempCycle = new Cycle();
@@ -84,6 +93,7 @@ public class CycleServiceImplementation implements CycleService {
     }
 
     @Override
+    @CacheEvict(cacheNames = "user", allEntries = true)
     public void deleteCycleById(int cycleId)
     {
        cycleRepository.deleteById(cycleId);
