@@ -19,12 +19,37 @@ function sendHttpRequest(method, url) {
   });
 }
 
-function deleteCycleById(cycleId) {
+function deleteCycleById(button) {
+  var cycleId = button.getAttribute("data-cycle-id");
+  var currentPage = button.getAttribute("data-current-page");
+  var sortField = button.getAttribute("data-sort-field");
+  var sortDir = button.getAttribute("data-sort-dir");
 
+  sendHttpRequest(
+    "GET",
+    "/deleteCycle/" +
+      cycleId +
+      "?page=" +
+      currentPage +
+      "&sortField=" +
+      sortField +
+      "&sortDir=" +
+      sortDir
+  ).then((response) => {
 
-  sendHttpRequest("GET", "/deleteCycle/" + cycleId).then((response) => {
-    console.log(response);
-    console.log("Deleting cycle with:" + cycleId);
+    let cycles = JSON.parse(response);
+
+    console.log(cycles);
+
+    console.log(
+      "Deleting cycle with id:" +
+        cycleId +
+        "& page=" +
+        currentPage +
+        "& sortField=" +
+        sortField
+    );
+
     let cycleRow = document.getElementById(cycleId);
     console.log(cycleRow);
     cycleRow.remove();
