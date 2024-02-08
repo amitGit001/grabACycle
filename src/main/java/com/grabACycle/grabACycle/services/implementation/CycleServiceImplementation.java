@@ -20,10 +20,10 @@ public class CycleServiceImplementation implements CycleService {
     {
         Cycle tempCycle = new Cycle();
 
-        tempCycle.setCycleId(cycle.getCycleId());
-        tempCycle.setCycleName(cycle.getCycleName());
-        tempCycle.setCycleModel(cycle.getCycleModel());
-        tempCycle.setCycleType(cycle.getCycleType());
+        tempCycle.setId(cycle.getId());
+        tempCycle.setName(cycle.getName());
+        tempCycle.setModel(cycle.getModel());
+        tempCycle.setType(cycle.getType());
         tempCycle.setBookingStatus(false);
 
         return cycleRepository.save(tempCycle);
@@ -46,10 +46,10 @@ public class CycleServiceImplementation implements CycleService {
     {
         Cycle tempCycle = new Cycle();
 
-        tempCycle.setCycleId(cycle.getCycleId());
-        tempCycle.setCycleName(cycle.getCycleName());
-        tempCycle.setCycleModel(cycle.getCycleModel());
-        tempCycle.setCycleType(cycle.getCycleType());
+        tempCycle.setId(cycle.getId());
+        tempCycle.setName(cycle.getName());
+        tempCycle.setModel(cycle.getModel());
+        tempCycle.setType(cycle.getType());
         tempCycle.setBookingStatus(false);
 
         return cycleRepository.save(tempCycle);
@@ -60,10 +60,9 @@ public class CycleServiceImplementation implements CycleService {
     {
         Cycle tempCycle = cycleRepository.findById(cycleId).get();
 
-        tempCycle.setCycleId(cycle.getCycleId());
-        tempCycle.setCycleName(cycle.getCycleName());
-        tempCycle.setCycleModel(cycle.getCycleModel());
-        tempCycle.setCycleType(cycle.getCycleType());
+        tempCycle.setName(cycle.getName());
+        tempCycle.setModel(cycle.getModel());
+        tempCycle.setType(cycle.getType());
         tempCycle.setBookingStatus(false);
 
         return cycleRepository.save(tempCycle);

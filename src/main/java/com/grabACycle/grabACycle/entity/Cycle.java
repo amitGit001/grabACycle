@@ -17,55 +17,68 @@ public class Cycle {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int cycleId;
+    private int id;
 
-    @Column(name = "cycleName", nullable = false, length = 50)
-    private String cycleName;
+    @Column(name = "name", nullable = false)
+    private String name;
 
-    @Column(name = "cycleModel", nullable = false, length = 10)
-    private String cycleModel;
+    @Column(name = "model", nullable = false)
+    private String model;
 
-    @Column(name = "cycleType", length = 100)
-    private String cycleType;
+    @Column(name = "type", length = 100)
+    private String type;
 
-    @Column(name = "bookingStatus")
-    @ColumnDefault("false")
+    @Column(name="booking_status", columnDefinition = "BOOLEAN DEFAULT false")
     private boolean bookingStatus;
 
-    public int getCycleId() {
-        return cycleId;
+
+//    @Column(name = "booked_by")
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "booked_by", referencedColumnName = "id")
+//    private int bookedBy;
+
+
+    public Cycle(String name, String model, String type, boolean bookingStatus) {
+        this.name = name;
+        this.model = model;
+        this.type = type;
+        this.bookingStatus = bookingStatus;
     }
 
-    public String getCycleName() {
-        return cycleName;
+    public int getId() {
+        return id;
     }
 
-    public String getCycleModel() {
-        return cycleModel;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getCycleType() {
-        return cycleType;
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public boolean isBookingStatus() {
         return bookingStatus;
-    }
-
-    public void setCycleId(int cycleId) {
-        this.cycleId = cycleId;
-    }
-
-    public void setCycleName(String cycleName) {
-        this.cycleName = cycleName;
-    }
-
-    public void setCycleModel(String cycleModel) {
-        this.cycleModel = cycleModel;
-    }
-
-    public void setCycleType(String cycleType) {
-        this.cycleType = cycleType;
     }
 
     public void setBookingStatus(boolean bookingStatus) {

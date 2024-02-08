@@ -14,12 +14,12 @@ public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int roleId;
+    private int id;
 
-    @Column(name = "userRole", nullable = false, columnDefinition = "VARCHAR(255)")
-    private String userRole;
+    @Column(name = "role", nullable = false)
+    private String role;
 
-    public Role(String userRole) {
-        this.userRole = userRole;
+    public Role(String role) {
+        this.role = role;
     }
 }
