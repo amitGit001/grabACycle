@@ -50,6 +50,17 @@
     </div>
 
 
+<!--    searching code -->
+
+    <form th:action="@{/home}">
+        Search cycle : <input type="text" name="keyword" id="keyword" size="15" th:value="${keyword}" required /> &nbsp;
+        <input type="submit" value="Search" /> &nbsp;
+    </form>
+
+
+    <!--    searching code -->
+
+
     <table class="cycles-list-table">
         <thead>
         <tr>

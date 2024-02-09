@@ -8,7 +8,7 @@ import lombok.Setter;
 
 import java.util.List;
 
-@AllArgsConstructor
+//@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
@@ -16,4 +16,9 @@ public class CycleDto {
 
     private List<Cycle> cycles;
     private long totalItems;
+
+    public CycleDto(List<Cycle> cycles, long totalItems) {
+        this.cycles = cycles;
+        this.totalItems = totalItems;
+    }
 }
