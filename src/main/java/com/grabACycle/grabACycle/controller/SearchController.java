@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class SearchController {
     private CycleService cycleService;
 
     //search implementation
-    @RequestMapping("home")
+    @RequestMapping("/search")
     public String viewCyclePage1(Model model, @Param("keyword") String keyword)
     {
         List<Cycle> cycleList = cycleService.searchAllCycles(keyword);

@@ -16,7 +16,3 @@ function sendHttpRequest(method, url) {
     req.send();
   });
 }
-
-
-
-
