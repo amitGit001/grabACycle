@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.Date;
 
 @Data
-//@NoArgsConstructor
+    
 @Entity
 @Table(name = "User")
 public class User {
