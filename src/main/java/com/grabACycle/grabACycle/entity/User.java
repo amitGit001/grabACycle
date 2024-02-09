@@ -6,9 +6,10 @@ import lombok.*;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Data
-@NoArgsConstructor
+
 @Entity
 @Table(name = "User")
 public class User {
@@ -39,9 +40,13 @@ public class User {
             joinColumns = @JoinColumn( name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn( name = "role_id", referencedColumnName = "id")
     )
-    private Collection<Role> roles;
+    private List<Role> roles;
 
-    public User(String firstName, String lastName, String email, String password, Date dob, Collection<Role> roles) {
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "bookedBy", cascade = CascadeType.ALL)
+    private List<Cycle> cycles;
+
+    public User(String firstName, String lastName, String email, String password, Date dob, List<Role> roles) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -106,7 +111,7 @@ public class User {
         return roles;
     }
 
-    public void setRoles(Collection<Role> roles) {
+    public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
 }

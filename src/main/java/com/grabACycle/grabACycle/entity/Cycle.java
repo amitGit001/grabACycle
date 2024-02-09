@@ -9,7 +9,7 @@ import org.hibernate.annotations.ColumnDefault;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
+
 @Builder
 @Entity
 @Table(name = "Cycle")
@@ -32,10 +32,11 @@ public class Cycle {
     private boolean bookingStatus;
 
 
-//    @Column(name = "booked_by")
-//    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "booked_by", referencedColumnName = "id")
-//    private int bookedBy;
+
+
+    @ManyToOne(fetch= FetchType.LAZY)
+    @JoinColumn(name = "booked_by")
+    private User bookedBy;
 
 
     public Cycle(String name, String model, String type, boolean bookingStatus) {
