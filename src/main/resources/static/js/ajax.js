@@ -92,7 +92,7 @@ function refreshTable(data, currentPage, sortField, sortDir) {
 
     let actionsCell = row.insertCell(5);
 
-    let actionsButtons = `<div> <a href='/showFormForUpdate/${cycle.id}'>Update</a> <button onclick='deleteCycleById(this)' data-cycle-id='${cycle.id}' data-current-page='${currentPage}' data-sort-field='${sortField}' data-sort-dir='${sortDir}'>Delete</button> </div>`;
+    let actionsButtons = `<div> <a href='/showFormForUpdate/${cycle.id}?returnToPage=${currentPage}&sortField=${sortField}&sortDir=${sortDir}'>Update</a> <button onclick='deleteCycleById(this)' data-cycle-id='${cycle.id}' data-current-page='${currentPage}' data-sort-field='${sortField}' data-sort-dir='${sortDir}'>Delete</button> </div>`;
 
     actionsCell.innerHTML = actionsButtons;
   });

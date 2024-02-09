@@ -16,6 +16,8 @@ import java.util.List;
 public class CycleController
 {
 
+    static int PAGE_SIZE= 12;
+
     private CycleService cycleService;
 
     @Autowired
@@ -34,7 +36,7 @@ public class CycleController
     @GetMapping("/page/{pageNo}")
     public String findPaginated(@PathVariable(value="pageNo") int pageNo, @RequestParam("sortField")  String sortField, @RequestParam("sortDir") String sortDir, Model model)
     {
-        int pageSize=5; // we can take the pagesize from front end as well using path variable, or declare the size in application.properties
+        int pageSize= PAGE_SIZE; // we can take the pagesize from front end as well using path variable, or declare the size in application.properties
 
         Page<Cycle> page=cycleService.findPaginated(pageNo, pageSize,sortField, sortDir);
 
@@ -58,7 +60,7 @@ public class CycleController
     public CycleDto fetchPage(@PathVariable(value="pageNo") int pageNo, @RequestParam("sortField") String sortField, @RequestParam("sortDir") String sortDir){
 
 
-        int pageSize=5; // we can take the pagesize from front end as well using path variable, or declare the size in application.properties
+        int pageSize= PAGE_SIZE; // we can take the pagesize from front end as well using path variable, or declare the size in application.properties
 
         Page<Cycle> page = cycleService.findPaginated(pageNo, pageSize,sortField, sortDir);
 
@@ -84,33 +86,56 @@ public class CycleController
 
     // Add a new Cycle form
     @GetMapping("/showNewCycleForm")
-    public String showNewCycleForm(Model model)
+    public String showNewCycleForm(@RequestParam(value="returnToPage") int page,
+                                   @RequestParam(value="sortField") String sortField,
+                                   @RequestParam(value="sortDir") String sortDir,
+                                   Model model)
     {
         // create model attribute to bind form data
         Cycle cycle=new Cycle();
         model.addAttribute("cycle", cycle); // thymleaf template will access this empty cycle object for binding form data
+        model.addAttribute("returnToPage", page);
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+
         return "add_cycle";
     }
 
     @PostMapping("/createCycle")
-    public String saveCycle(@ModelAttribute("cycle") Cycle cycle)
+    public String saveCycle(@ModelAttribute("cycle") Cycle cycle, Model model,
+                            @RequestParam(value = "sortField") String sortField,
+                            @RequestParam(value = "sortDir") String sortDir,
+                            @RequestParam(value = "returnToPage") int page)
     {
+        System.out.println(cycle);
         // save cycle to database
         cycleService.createCycle(cycle);
-        return "redirect:/";
+
+
+        return "redirect:/page/" + page + "?sortField=" + sortField + "&sortDir=" + sortDir;
     }
 
 
 
     // Update cycle form
     @GetMapping("/showFormForUpdate/{id}")
-    public String showFormForUpdate(@PathVariable int id, Model model)
+    public String showFormForUpdate(@PathVariable int id,
+                                    @RequestParam(value = "returnToPage") int page,
+                                    @RequestParam(value="sortField") String sortField,
+                                    @RequestParam(value="sortDir") String sortDir,
+                                    Model model)
     {
+        System.out.println("Showing form");
         // get cycle from the service layer
         Cycle cycle= cycleService.fetchCycleById(id);
-
+        System.out.println(cycle);
         // set cycle as a model attribute to pre-populate the form data
         model.addAttribute("cycle", cycle);
+        model.addAttribute("returnToPage", page);
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+
+
 
         return "update_cycle";
 

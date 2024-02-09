@@ -46,7 +46,7 @@
 
 <!--    Displays Add Cycle Option To Admin Only -->
     <div sec:authorize="hasRole('ROLE_ADMIN')">
-        <a  th:href="@{/showNewCycleForm}">Add New Cycle</a>
+        <a  th:href="@{'/showNewCycleForm' + '?returnToPage=' + ${currentPage} + '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir} }">Add New Cycle</a>
     </div>
 
 
@@ -94,7 +94,7 @@
             <td th:text="${cycle.type}"></td>
             <td th:text="${cycle.bookingStatus}"></td>
 
-            <td sec:authorize="hasRole('ROLE_ADMIN')" ><a  th:href="@{/showFormForUpdate/{id}(id=${cycle.id})}">Update</a>
+            <td sec:authorize="hasRole('ROLE_ADMIN')" ><a  th:href="@{'/showFormForUpdate/' + ${cycle.id} + '?returnToPage=' + ${currentPage} + '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir} }">Update</a>
                 <button th:attr="data-cycle-id=${cycle.id}, data-current-page=${currentPage}, data-sort-field=${sortField}, data-sort-dir=${sortDir}" onclick="deleteCycleById(this)"
                 >Delete</button>
 
@@ -111,8 +111,11 @@
             <span id="total-items-data">
                 [[${totalItems}]]
             </span>
-            <div>
-                <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+            <div th:with="startPage=${currentPage - 4 > 1 ? currentPage - 4 : 1}, endPage=${(startPage + 8) lt totalPages ? (startPage + 8) : totalPages}">
+
+
+
+                <span th:each="i: ${#numbers.sequence(startPage, endPage)}">
 
                     <a th:if="${currentPage != i}" th:href="@{'/page/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
 

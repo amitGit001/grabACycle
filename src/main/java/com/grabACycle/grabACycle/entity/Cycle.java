@@ -31,13 +31,9 @@ public class Cycle {
     @Column(name="booking_status", columnDefinition = "BOOLEAN DEFAULT false")
     private boolean bookingStatus;
 
-
-
-
     @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn(name = "booked_by")
     private User bookedBy;
-
 
     public Cycle(String name, String model, String type, boolean bookingStatus) {
         this.name = name;
@@ -84,6 +80,18 @@ public class Cycle {
 
     public boolean isBookingStatus() {
         return bookingStatus;
+    }
+
+    @Override
+    public String toString() {
+        return "Cycle{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", model='" + model + '\'' +
+                ", type='" + type + '\'' +
+                ", bookingStatus=" + bookingStatus +
+                ", bookedBy=" + bookedBy +
+                '}';
     }
 
     public void setBookingStatus(boolean bookingStatus) {

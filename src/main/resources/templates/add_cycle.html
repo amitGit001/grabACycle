@@ -8,7 +8,8 @@
 <div>
 
     <div th:replace="~{fragments/header :: header}"></div>
-    <form th:action="@{/createCycle}" th:object="${cycle}" method="POST">
+    <form th:action="@{'/createCycle' + '?returnToPage=' + ${returnToPage} + '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir} }"
+          th:object="${cycle}" method="POST">
         <input type="text" th:field="*{name}" placeholder="Cycle Name">
         <input type="text" th:field="*{model}" placeholder="Cycle Model">
         <input type="text" th:field="*{type}" placeholder="Cycle Type">

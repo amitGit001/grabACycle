@@ -39,6 +39,8 @@ public class SecurityConfiguration {
                 .requestMatchers("/registration**", "/js/**", "/css/**", "/img/**").permitAll()
                 .anyRequest().permitAll());
 
+        http.csrf().disable();
+
         http.formLogin(form -> form
                 .loginPage("/login")
                 .defaultSuccessUrl("/")
