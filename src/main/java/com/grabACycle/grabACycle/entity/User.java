@@ -43,8 +43,8 @@ public class User {
     private List<Role> roles;
 
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "bookedBy", cascade = CascadeType.ALL)
-    private List<Cycle> cycles;
+//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "bookedBy", cascade = CascadeType.ALL)
+//    private List<Cycle> cycles;
 
     public User(String firstName, String lastName, String email, String password, Date dob, List<Role> roles) {
         this.firstName = firstName;

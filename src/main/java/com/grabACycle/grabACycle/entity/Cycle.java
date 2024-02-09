@@ -34,9 +34,9 @@ public class Cycle {
 
 
 
-    @ManyToOne(fetch= FetchType.LAZY)
-    @JoinColumn(name = "booked_by")
-    private User bookedBy;
+//    @ManyToOne(fetch= FetchType.LAZY)
+//    @JoinColumn(name = "booked_by")
+//    private User bookedBy;
 
 
     public Cycle(String name, String model, String type, boolean bookingStatus) {
