@@ -9,7 +9,7 @@ import org.hibernate.annotations.ColumnDefault;
 
 @Data
 @AllArgsConstructor
-//@NoArgsConstructor
+    
 @Builder
 @Entity
 @Table(name = "Cycle")
