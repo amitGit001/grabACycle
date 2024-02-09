@@ -3,6 +3,7 @@ package com.grabACycle.grabACycle.controller;
 
 import com.grabACycle.grabACycle.entity.Cycle;
 import com.grabACycle.grabACycle.services.CycleService;
+import com.grabACycle.grabACycle.web.dto.CycleDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -51,7 +52,35 @@ public class CycleController
 
     }
 
+    // fetches data of the specified page number
+    @GetMapping("/cycles/page/{pageNo}")
+    @ResponseBody
+    public CycleDto fetchPage(@PathVariable(value="pageNo") int pageNo, @RequestParam("sortField") String sortField, @RequestParam("sortDir") String sortDir){
 
+
+        int pageSize=5; // we can take the pagesize from front end as well using path variable, or declare the size in application.properties
+
+        Page<Cycle> page = cycleService.findPaginated(pageNo, pageSize,sortField, sortDir);
+
+        List<Cycle> listCycles=page.getContent();
+        long totalItems= page.getTotalElements();
+
+        CycleDto cycleDto = new CycleDto(listCycles, totalItems);
+
+        return cycleDto;
+    }
+
+    // Delete Cycle
+    @GetMapping("/deleteCycle/{id}")
+    @ResponseBody
+    public CycleDto deleteCycle(@PathVariable(value="id") int cycleId, @RequestParam("page") int pageNo, @RequestParam("sortField") String sortField, @RequestParam("sortDir") String sortDir)
+    {
+
+        // call delete cycle method
+        cycleService.deleteCycleById(cycleId);
+
+        return fetchPage(pageNo, sortField, sortDir);
+    }
 
     // Add a new Cycle form
     @GetMapping("/showNewCycleForm")
@@ -88,23 +117,6 @@ public class CycleController
     }
 
 
-    // Delete Cycle
-    @GetMapping("/deleteCycle/{id}")
-    @ResponseBody
-    public List<Cycle> deleteCycle(@PathVariable(value="id") int cycleId, @RequestParam("page") int pageNo, @RequestParam("sortField") String sortField, @RequestParam("sortDir") String sortDir)
-    {
 
-        // call delete cycle method
-        cycleService.deleteCycleById(cycleId);
-
-        // return the updated page
-        int pageSize=5; // we can take the pagesize from front end as well using path variable, or declare the size in application.properties
-
-        Page<Cycle> page=cycleService.findPaginated(pageNo, pageSize,sortField, sortDir);
-
-        List<Cycle> listCycles=page.getContent();
-
-        return listCycles;
-    }
 
 }
