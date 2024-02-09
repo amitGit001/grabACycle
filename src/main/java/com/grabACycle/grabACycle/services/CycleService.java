@@ -21,4 +21,6 @@ public interface CycleService {
     void deleteCycleById(int cycleId);
 
     Page<Cycle> findPaginated(int pageNo, int pageSize, String sortField, String sortDir);
+
+    List<Cycle> searchAllCycles(String keyword);
 }
