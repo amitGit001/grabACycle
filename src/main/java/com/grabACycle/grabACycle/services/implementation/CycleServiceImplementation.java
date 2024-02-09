@@ -47,7 +47,7 @@ public class CycleServiceImplementation implements CycleService {
     }
 
     @Override
-    @Cacheable(cacheNames = "cycle",unless="#result == null")
+//    @Cacheable(cacheNames = "cycle",unless="#result == null")
     public Cycle fetchCycleById(int cycleId)
     {
         Optional<Cycle> optional=cycleRepository.findById(cycleId);

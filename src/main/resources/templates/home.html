@@ -1,162 +1,172 @@
-<!--<!DOCTYPE html>-->
-<!--<html xmlns:th="http://www.thymeleaf.org"-->
-<!--      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">-->
-<!--<head>-->
-<!--    <meta charset="ISO-8859-1">-->
-<!--    <title>Registration and Login App</title>-->
-
-<!--    <link rel="stylesheet"-->
-<!--          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"-->
-<!--          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"-->
-<!--          crossorigin="anonymous">-->
-
-<!--</head>-->
-<!--<body>-->
-
-
-<!--<div class="container">-->
-<!--    <h1>Registration and Login with Spring Boot, Spring Security,-->
-<!--        Thymeleaf, Hibernate and MySQL</h1>-->
-<!--    Welcome <span sec:authentication="principal.username"> User</span>-->
-<!--</div>-->
-
-
-<!--</body>-->
-<!--</html>-->
-
-
-<!doctype html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:th="http://www.w3.org/1999/xhtml"
+  xmlns:sec="http://www.w3.org/1999/xhtml"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Home</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}" />
+  </head>
+  <body>
+    <div th:replace="fragments/header :: header"></div>
 
-
-</head>
-<body>
-
-<div th:replace="fragments/header :: header"></div>
-
-<main>
-<div class="cycles-list">
-
-<!--    Displays Add Cycle Option To Admin Only -->
-    <div sec:authorize="hasRole('ROLE_ADMIN')">
-        <a  th:href="@{/showNewCycleForm}">Add New Cycle</a>
-    </div>
-
-
-<!--    searching code -->
-
-    <form th:action="@{/home}">
-        Search cycle : <input type="text" name="keyword" id="keyword" size="15" th:value="${keyword}" required /> &nbsp;
-        <input type="submit" value="Search" /> &nbsp;
+    <form th:action="@{/search}">
+      Search cycle :
+      <input
+        type="text"
+        name="keyword"
+        id="keyword"
+        size="15"
+        th:value="${keyword}"
+        required
+      />
+      &nbsp; <input type="submit" value="Search" /> &nbsp;
     </form>
 
-
-    <!--    searching code -->
-
-
-    <table class="cycles-list-table">
-        <thead>
-        <tr>
-            <th>
-                <a th:href="@{'/page/' + ${currentPage} + '?sortField=id&sortDir=' + ${reverseSortDir}}">
-                    id
-                </a>
-
-            </th>
-            <th>
-                <a th:href="@{'/page/' + ${currentPage} + '?sortField=name&sortDir=' + ${reverseSortDir}}">
-                    Name
-                </a>
-            </th>
-            <th>
-                <a th:href="@{'/page/' + ${currentPage} + '?sortField=model&sortDir=' + ${reverseSortDir}}">
-                  Model
-                </a>
-            </th>
-
-            <th>
-                <a th:href="@{'/page/' + ${currentPage} + '?sortField=type&sortDir=' + ${reverseSortDir}}">
-                    Type
-                </a>
-            </th>
-
-            <th>
-                <a th:href="@{'/page/' + ${currentPage} + '?sortField=bookingStatus&sortDir=' + ${reverseSortDir}}">
-                    Status
-                </a>
-            </th>
-
-
-            <th sec:authorize="hasRole('ROLE_ADMIN')" >Actions</th>
-        </tr>
-        </thead>
-        <tbody id="cycles-list-table">
-        <tr th:each="cycle, cycleInfo : ${listCycles}"  th:id="${cycle.id}">
-            <td th:text="${cycle.id}"></td>
-            <td th:text="${cycle.name}"></td>
-            <td th:text="${cycle.model}"></td>
-            <td th:text="${cycle.type}"></td>
-            <td th:text="${cycle.bookingStatus}"></td>
-
-            <td sec:authorize="hasRole('ROLE_ADMIN')" ><a  th:href="@{/showFormForUpdate/{id}(id=${cycle.id})}">Update</a>
-                <button th:attr="data-cycle-id=${cycle.id}, data-current-page=${currentPage}, data-sort-field=${sortField}, data-sort-dir=${sortDir}" onclick="deleteCycleById(this)"
-                >Delete</button>
-
-            </td>
-        </tr>
-        </tbody>
-    </table>
-
-<!--    Pagination -->
-
-    <div th:if="${totalPages > 1}">
-        <div>
-            Total Rows:
-            <span id="total-items-data">
-                [[${totalItems}]]
-            </span>
-            <div>
-                <span th:each="i: ${#numbers.sequence(1, totalPages)}">
-
-                    <a th:if="${currentPage != i}" th:href="@{'/page/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">[[${i}]]</a>
-
-                    <span th:unless="${currentPage !=i}">[[${i}]] </span> &nbsp; &nbsp;
-                </span>
-            </div>
-
-
-            <div>
-                <a th:if="${currentPage > 1}" th:href="@{'/page/' + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Prev</a>
-                <span th:unless="${currentPage > 1}">Prev</span>
-            </div>
-
-            <div >
-                <a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Next</a>
-                <span th:unless="${currentPage < totalPages}">Next</span>
-            </div>
-
-            <div >
-                <a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${totalPages} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">Last</a>
-                <span th:unless="${currentPage < totalPages}">Last</span>
-            </div>
+    <main>
+      <div class="cycles-list">
+        <!--    Displays Add Cycle Option To Admin Only -->
+        <div sec:authorize="hasRole('ROLE_ADMIN')">
+          <a
+            th:href="@{'/showNewCycleForm' + '?returnToPage=' + ${currentPage} + '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir} }"
+            >Add New Cycle</a
+          >
         </div>
 
+        <table class="cycles-list-table">
+          <thead>
+            <tr>
+              <th>
+                <a
+                  th:href="@{'/page/' + ${currentPage} + '?sortField=id&sortDir=' + ${reverseSortDir}}"
+                >
+                  id
+                </a>
+              </th>
+              <th>
+                <a
+                  th:href="@{'/page/' + ${currentPage} + '?sortField=name&sortDir=' + ${reverseSortDir}}"
+                >
+                  Name
+                </a>
+              </th>
+              <th>
+                <a
+                  th:href="@{'/page/' + ${currentPage} + '?sortField=model&sortDir=' + ${reverseSortDir}}"
+                >
+                  Model
+                </a>
+              </th>
 
-    </div>
+              <th>
+                <a
+                  th:href="@{'/page/' + ${currentPage} + '?sortField=type&sortDir=' + ${reverseSortDir}}"
+                >
+                  Type
+                </a>
+              </th>
 
-</div>
-</main>
+              <th>
+                <a
+                  th:href="@{'/page/' + ${currentPage} + '?sortField=bookingStatus&sortDir=' + ${reverseSortDir}}"
+                >
+                  Status
+                </a>
+              </th>
 
-<div th:replace="fragments/footer :: footer"></div>
+              <th sec:authorize="hasRole('ROLE_ADMIN')">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="cycles-list-table">
+            <tr th:each="cycle, cycleInfo : ${listCycles}" th:id="${cycle.id}">
+              <td th:text="${cycle.id}"></td>
+              <td th:text="${cycle.name}"></td>
+              <td th:text="${cycle.model}"></td>
+              <td th:text="${cycle.type}"></td>
+              <td th:text="${cycle.bookingStatus}"></td>
 
-<script src="/js/ajax.js"></script>
+              <td sec:authorize="hasRole('ROLE_ADMIN')">
+                <a
+                  th:href="@{'/showFormForUpdate/' + ${cycle.id} + '?returnToPage=' + ${currentPage} + '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir} }"
+                  >Update</a
+                >
+                <button
+                  th:attr="data-cycle-id=${cycle.id}, data-current-page=${currentPage}, data-sort-field=${sortField}, data-sort-dir=${sortDir}"
+                  onclick="deleteCycleById(this)"
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
-</body>
+        <!--    Pagination -->
+
+        <div th:if="${totalPages > 1}">
+          <div>
+            Total Rows:
+            <span id="total-items-data"> [[${totalItems}]] </span>
+            <div
+              th:with="startPage=${currentPage - 4 > 1 ? currentPage - 4 : 1}, endPage=${(startPage + 8) lt totalPages ? (startPage + 8) : totalPages}"
+            >
+              <span th:each="i: ${#numbers.sequence(startPage, endPage)}">
+                <a
+                  th:if="${currentPage != i}"
+                  th:href="@{'/page/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+                  >[[${i}]]</a
+                >
+
+                <span th:unless="${currentPage !=i}">[[${i}]] </span> &nbsp;
+                &nbsp;
+              </span>
+            </div>
+
+            <div>
+              <a
+                th:if="${currentPage > 1}"
+                th:href="@{'/page/' + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+                >Prev</a
+              >
+              <span th:unless="${currentPage > 1}">Prev</span>
+            </div>
+
+            <div>
+              <a
+                th:if="${currentPage < totalPages}"
+                th:href="@{'/page/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+                >Next</a
+              >
+              <span th:unless="${currentPage < totalPages}">Next</span>
+            </div>
+
+            <div>
+              <a
+                th:if="${currentPage < totalPages}"
+                th:href="@{'/page/' + ${totalPages} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+                >Last</a
+              >
+              <span th:unless="${currentPage < totalPages}">Last</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div th:replace="fragments/footer :: footer"></div>
+
+    <script src="/js/ajax.js"></script>
+    <script src="/js/RefreshTable.js"></script>
+    <script
+      sec:authorize="hasRole('ROLE_ADMIN')"
+      src="/js/DeleteCycle.js"
+    ></script>
+  </body>
 </html>
