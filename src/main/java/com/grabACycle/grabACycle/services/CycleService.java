@@ -24,5 +24,5 @@ public interface CycleService {
 
     Page<Cycle> findPaginated(int pageNo, int pageSize, String sortField, String sortDir);
 
-    List<Cycle> searchAllCycles(String keyword);
+
 }

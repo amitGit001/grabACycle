@@ -133,17 +133,5 @@ public class CycleServiceImplementation implements CycleService {
         return cycleRepository.findAll(pageable);
     }
 
-    //Searching
-    @Override
-    @Cacheable(cacheNames = "cycle")
-    public List<Cycle> searchAllCycles(String keyword)
-    {
-        if(keyword != null)
-        {
-            return cycleRepository.search(keyword);
-        }
-        else {
-            return (List<Cycle>) cycleRepository.findAll();
-        }
-    }
+
 }
