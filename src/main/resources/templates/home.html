@@ -17,17 +17,7 @@
   <body>
     <div th:replace="fragments/header :: header"></div>
 
-    <form th:action="@{/search/page/1?sortField=id&sortDir=asc}" method="POST">
-      Search cycle :
-      <input
-        type="text"
-        name="keyword"
-        id="keyword"
-        th:value="${keyword}"
-        required
-      />
-      &nbsp; <input type="submit" value="Search" /> &nbsp;
-    </form>
+
 
     <main>
       <div class="cycles-list">

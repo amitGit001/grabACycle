@@ -1,28 +1,33 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
-<body>
-<header th:fragment="header">
-    <!-- create navigation bar ( header) -->
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed"
-                        data-toggle="collapse" data-target="#navbar" aria-expanded="false"
-                        aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span> <span
-                        class="icon-bar"></span> <span class="icon-bar"></span> <span
-                        class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#" th:href="@{/}">Registration and
-                    Login Module</a>
-            </div>
-            <div id="navbar" class="collapse navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></li>
-                </ul>
-            </div>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.w3.org/1999/xhtml"
+>
+  <body>
+    <header th:fragment="header" class="header">
+      <div>
+        <div class="logo">Grab A Cycle</div>
+        <div class="search-form">
+          <form
+            th:action="@{/search/page/1?sortField=id&sortDir=asc}"
+            method="POST"
+          >
+            <input
+              type="text"
+              name="keyword"
+              id="keyword"
+              th:value="${keyword}"
+              required
+            />
+            <input type="submit" value="Search" />
+          </form>
         </div>
-    </nav>
-</header>
-</body>
+
+        <div class="logout-btn" sec:authorize="isAuthenticated()">
+          <a th:href="@{/logout}">Logout</a>
+        </div>
+      </div>
+    </header>
+  </body>
 </html>
