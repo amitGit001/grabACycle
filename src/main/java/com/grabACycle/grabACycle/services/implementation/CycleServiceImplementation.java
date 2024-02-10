@@ -57,6 +57,7 @@ public class CycleServiceImplementation implements CycleService {
         {
             cycle=optional.get();
         }
+
         else{
             throw new RuntimeException("Cycle not found for id:"+cycleId);
         }
@@ -90,6 +91,29 @@ public class CycleServiceImplementation implements CycleService {
         tempCycle.setBookingStatus(false);
 
         return cycleRepository.save(tempCycle);
+    }
+
+    @Override
+    public Cycle updateBookingStatus(int cycleId) {
+
+        Optional<Cycle> optional = cycleRepository.findById(cycleId);
+
+        if(optional.isPresent()){
+
+            Cycle tempCycle=optional.get();
+
+            boolean currentStatus = tempCycle.isBookingStatus();
+
+            tempCycle.setBookingStatus(!currentStatus);
+
+             cycleRepository.save(tempCycle);
+
+             return tempCycle;
+        }
+
+        return null;
+
+
     }
 
     @Override

@@ -90,7 +90,10 @@
               <td th:text="${cycle.name}"></td>
               <td th:text="${cycle.model}"></td>
               <td th:text="${cycle.type}"></td>
-              <td th:text="${cycle.bookingStatus}"></td>
+              <td
+                th:text="${cycle.bookingStatus}"
+                th:onclick="updateBookingStatus(${cycle.id})"
+              ></td>
 
               <td sec:authorize="hasRole('ROLE_ADMIN')">
                 <a
@@ -164,6 +167,7 @@
 
     <script src="/js/ajax.js"></script>
     <script src="/js/RefreshTable.js"></script>
+    <script src="/js/updateBookingStatus.js"></script>
     <script
       sec:authorize="hasRole('ROLE_ADMIN')"
       src="/js/DeleteCycle.js"
