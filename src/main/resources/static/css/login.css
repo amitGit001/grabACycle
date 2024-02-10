@@ -1,0 +1,134 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Outfit", sans-serif;
+}
+
+:root {
+  --theme-color: #0a6de6;
+  --theme-color-dark: #2056c3;
+  --light-grey-color: #e7eaec;
+  --dark-grey-color: #8a99a3;
+  --light-red-color: #ffe1e2;
+  --dark-red-color: #c94a51;
+  --light-blue-color: #d3e1fd;
+}
+
+.content {
+  height: 100vh;
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--light-grey-color);
+}
+
+.content-wrapper {
+  display: flex;
+  background-color: white;
+  padding: 32px 58px 32px 42px;
+  border-radius: 8px;
+}
+
+.image-container {
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+}
+
+.image-container img {
+  height: 60vh;
+}
+
+.login-form-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: start;
+  margin-left: 90px;
+  flex-grow: 1;
+}
+
+.welcome-message {
+  font-family: "Outfit", sans-serif;
+  font-size: 40px;
+  font-weight: 700;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.login-form input {
+  font-size: 15px;
+  font-weight: 500;
+  padding: 5px 10px;
+  border: 0px;
+  border-bottom: 3px solid var(--light-grey-color);
+  width: 300px;
+  transition: all 0.05s ease-out;
+}
+
+.login-form input:focus {
+  outline: none;
+  border-bottom: 3px solid var(--theme-color);
+}
+
+.login-form input::placeholder {
+  color: var(--dark-grey-color);
+}
+
+.login-form button {
+  background: var(--theme-color);
+  border-radius: 3px;
+  border: none;
+  width: 300px;
+  padding: 9px 8px;
+  font-family: "Outfit", sans-serif;
+  color: white;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 550;
+}
+
+.login-form button:hover {
+  background: var(--theme-color-dark);
+}
+
+.register-container {
+  align-self: center;
+}
+
+.register-container a {
+  margin-left: 8px;
+  color: #0a6de6;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.register-container a:hover {
+  text-decoration: underline;
+}
+
+.error-message div {
+  background: var(--light-red-color);
+  padding: 6px 12px;
+  border-radius: 3px;
+  color: var(--dark-red-color);
+  text-align: center;
+}
+
+.logged-out-message div {
+  padding: 6px 12px;
+  border-radius: 3px;
+  color: var(--theme-color);
+  text-align: center;
+  background: var(--light-blue-color);
+}

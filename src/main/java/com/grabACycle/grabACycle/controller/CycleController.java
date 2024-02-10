@@ -141,6 +141,14 @@ public class CycleController
 
     }
 
+        @GetMapping("/updateBookingStatus/{id}")
+        @ResponseBody
+        public Cycle updateBookingStatus(@PathVariable int id){
+
+           return cycleService.updateBookingStatus(id);
+
+
+        }
 
 
 

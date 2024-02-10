@@ -18,6 +18,8 @@ public interface CycleService {
 
     Cycle updateCycleById(int cycleId, Cycle cycle);
 
+    Cycle updateBookingStatus(int cycleId);
+
     void deleteCycleById(int cycleId);
 
     Page<Cycle> findPaginated(int pageNo, int pageSize, String sortField, String sortDir);

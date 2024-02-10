@@ -94,6 +94,29 @@ public class CycleServiceImplementation implements CycleService {
     }
 
     @Override
+    public Cycle updateBookingStatus(int cycleId) {
+
+        Optional<Cycle> optional = cycleRepository.findById(cycleId);
+
+        if(optional.isPresent()){
+
+            Cycle tempCycle=optional.get();
+
+            boolean currentStatus = tempCycle.isBookingStatus();
+
+            tempCycle.setBookingStatus(!currentStatus);
+
+             cycleRepository.save(tempCycle);
+
+             return tempCycle;
+        }
+
+        return null;
+
+
+    }
+
+    @Override
     @CacheEvict(cacheNames = "user", allEntries = true)
     public void deleteCycleById(int cycleId)
     {
