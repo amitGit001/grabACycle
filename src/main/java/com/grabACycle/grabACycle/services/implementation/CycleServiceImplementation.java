@@ -57,6 +57,7 @@ public class CycleServiceImplementation implements CycleService {
         {
             cycle=optional.get();
         }
+
         else{
             throw new RuntimeException("Cycle not found for id:"+cycleId);
         }
