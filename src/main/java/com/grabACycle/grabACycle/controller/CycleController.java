@@ -49,6 +49,7 @@ public class CycleController
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
         model.addAttribute("listCycles", listCycles);
+        model.addAttribute("search", false);
 
         return "home";
 
@@ -144,6 +145,8 @@ public class CycleController
         @GetMapping("/updateBookingStatus/{id}")
         @ResponseBody
         public Cycle updateBookingStatus(@PathVariable int id){
+
+            System.out.println(id);
 
            return cycleService.updateBookingStatus(id);
 

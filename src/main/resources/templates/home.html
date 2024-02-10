@@ -17,13 +17,12 @@
   <body>
     <div th:replace="fragments/header :: header"></div>
 
-    <form th:action="@{/search}">
+    <form th:action="@{/search/page/1?sortField=id&sortDir=asc}" method="POST">
       Search cycle :
       <input
         type="text"
         name="keyword"
         id="keyword"
-        size="15"
         th:value="${keyword}"
         required
       />
@@ -90,11 +89,25 @@
               <td th:text="${cycle.name}"></td>
               <td th:text="${cycle.model}"></td>
               <td th:text="${cycle.type}"></td>
-              <td
-                th:text="${cycle.bookingStatus}"
-                th:onclick="updateBookingStatus(${cycle.id})"
-              ></td>
 
+              <!-- booking button -->
+              <td
+                sec:authorize="hasRole('ROLE_USER')"
+                th:onclick="'updateBookingStatus(' + ${cycle.id} + ')'"
+              >
+                <span th:if="${cycle.bookingStatus}" class="booked">Booked</span>
+                <span th:if="${!cycle.bookingStatus}" class="available">Available</span>
+              </td>
+
+              <td
+                      sec:authorize="hasRole('ROLE_ADMIN')"
+
+              >
+                <span th:if="${cycle.bookingStatus}" class="booked">Booked</span>
+                <span th:if="${!cycle.bookingStatus}" class="available">Available</span>
+              </td>
+
+<!--              action buttons -->
               <td sec:authorize="hasRole('ROLE_ADMIN')">
                 <a
                   th:href="@{'/showFormForUpdate/' + ${cycle.id} + '?returnToPage=' + ${currentPage} + '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir} }"
@@ -122,8 +135,15 @@
             >
               <span th:each="i: ${#numbers.sequence(startPage, endPage)}">
                 <a
-                  th:if="${currentPage != i}"
+                  th:if="${currentPage != i and !search}"
                   th:href="@{'/page/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+                  >[[${i}]]</a
+                >
+
+                <!-- pages for search -->
+                <a
+                  th:if="${currentPage != i and search}"
+                  th:href="@{'/search/' + ${keyword} + '/page/' + ${i}  + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
                   >[[${i}]]</a
                 >
 
@@ -134,8 +154,15 @@
 
             <div>
               <a
-                th:if="${currentPage > 1}"
+                th:if="${currentPage > 1 and !search}"
                 th:href="@{'/page/' + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+                >Prev</a
+              >
+
+              <!-- pages for search -->
+              <a
+                th:if="${currentPage > 1 and search}"
+                th:href="@{'/search/' + ${keyword} + '/page/'  + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
                 >Prev</a
               >
               <span th:unless="${currentPage > 1}">Prev</span>
@@ -143,8 +170,15 @@
 
             <div>
               <a
-                th:if="${currentPage < totalPages}"
+                th:if="${currentPage < totalPages and !search}"
                 th:href="@{'/page/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+                >Next</a
+              >
+
+              <!-- pages for search -->
+              <a
+                th:if="${currentPage < totalPages and search}"
+                th:href="@{'/search/' + ${keyword} + '/page/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
                 >Next</a
               >
               <span th:unless="${currentPage < totalPages}">Next</span>
@@ -152,8 +186,15 @@
 
             <div>
               <a
-                th:if="${currentPage < totalPages}"
+                th:if="${currentPage < totalPages and !search}"
                 th:href="@{'/page/' + ${totalPages} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+                >Last</a
+              >
+
+              <!-- pages for search -->
+              <a
+                th:if="${currentPage < totalPages and search}"
+                th:href="@{'/search/' + ${keyword} + '/page/'  + ${totalPages} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
                 >Last</a
               >
               <span th:unless="${currentPage < totalPages}">Last</span>

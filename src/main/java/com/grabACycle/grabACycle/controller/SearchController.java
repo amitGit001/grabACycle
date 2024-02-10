@@ -3,15 +3,15 @@ package com.grabACycle.grabACycle.controller;
 import com.grabACycle.grabACycle.dao.CycleRepository;
 import com.grabACycle.grabACycle.entity.Cycle;
 import com.grabACycle.grabACycle.services.CycleService;
+import com.grabACycle.grabACycle.services.SearchService;
+import io.micrometer.core.instrument.search.Search;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,18 +19,57 @@ import java.util.List;
 public class SearchController {
 
     @Autowired
-    private CycleService cycleService;
+    private SearchService searchService;
 
     //search implementation
-    @RequestMapping("/search")
-    public String viewCyclePage1(Model model, @Param("keyword") String keyword)
+    @PostMapping("/search/page/{pageNo}")
+    public String viewCyclePaginated(Model model,
+                                 @PathVariable(value="pageNo") int pageNo,
+                                 @RequestParam("sortField") String sortField,
+                                 @RequestParam("sortDir") String sortDir ,
+                                 @ModelAttribute("keyword") String keyword)
     {
-        List<Cycle> cycleList = cycleService.searchAllCycles(keyword);
-
-        model.addAttribute("listCycles", cycleList);
+        System.out.println(keyword);
+        Page<Cycle> page = searchService.searchAllCyclesPaginated(pageNo, 15, sortField, sortDir, keyword);
+        List<Cycle> listCycles = page.getContent();
+        model.addAttribute("listCycles", listCycles);
         model.addAttribute("keyword", keyword);
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("totalItems", page.getTotalElements());
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+        model.addAttribute("search", true);
+
 
         return "home";
     }
+
+    @GetMapping("/search/{keyword}/page/{pageNo}")
+    public String viewCyclePage(Model model,
+                                 @PathVariable(value="pageNo") int pageNo,
+                                 @RequestParam("sortField") String sortField,
+                                 @RequestParam("sortDir") String sortDir ,
+                                 @PathVariable String keyword)
+    {
+        System.out.println(keyword);
+        Page<Cycle> page = searchService.searchAllCyclesPaginated(pageNo, 15, sortField, sortDir, keyword);
+        List<Cycle> listCycles = page.getContent();
+        model.addAttribute("listCycles", listCycles);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("totalItems", page.getTotalElements());
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+        model.addAttribute("search", true);
+
+
+        return "home";
+    }
+
+
 
 }
