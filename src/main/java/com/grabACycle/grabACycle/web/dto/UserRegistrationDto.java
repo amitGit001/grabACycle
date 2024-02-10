@@ -1,20 +1,15 @@
 package com.grabACycle.grabACycle.web.dto;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
-
-import java.util.Date;
+import java.time.LocalDate;
 
 public class UserRegistrationDto {
     private String firstName;
     private String lastName;
     private String email;
     private String password;
+    private LocalDate dob;
 
-    private Date dob;
-
-    public UserRegistrationDto(String firstName, String lastName, String email, String password, Date dob) {
+    public UserRegistrationDto(String firstName, String lastName, String email, String password, LocalDate dob) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -45,11 +40,11 @@ public class UserRegistrationDto {
         return email;
     }
 
-    public Date getDob() {
+    public LocalDate getDob() {
         return dob;
     }
 
-    public void setDob(Date dob) {
+    public void setDob(LocalDate dob) {
         this.dob = dob;
     }
 

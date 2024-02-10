@@ -4,8 +4,8 @@ package com.grabACycle.grabACycle.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 @Data
@@ -32,7 +32,7 @@ public class User {
 
     @Temporal(TemporalType.DATE)
     @Column(name = "dob")
-    private Date dob;
+    private LocalDate dob;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
@@ -42,11 +42,7 @@ public class User {
     )
     private List<Role> roles;
 
-
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "bookedBy", cascade = CascadeType.ALL)
-//    private List<Cycle> cycles;
-
-    public User(String firstName, String lastName, String email, String password, Date dob, List<Role> roles) {
+    public User(String firstName, String lastName, String email, String password, LocalDate dob, List<Role> roles) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -99,11 +95,11 @@ public class User {
         this.password = password;
     }
 
-    public Date getDob() {
+    public LocalDate getDob() {
         return dob;
     }
 
-    public void setDob(Date dob) {
+    public void setDob(LocalDate dob) {
         this.dob = dob;
     }
 
