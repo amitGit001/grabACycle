@@ -1,6 +1,8 @@
 package com.grabACycle.grabACycle.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,12 +20,18 @@ public class Cycle {
     private int id;
 
     @Column(name = "name", nullable = false)
+    @NotEmpty(message = "Cycle name should not be blank.")
+    @Size(min = 3, message = "Cycle name should atleast contain 3 characters.")
     private String name;
 
     @Column(name = "model", nullable = false)
+    @NotEmpty(message = "Cycle model should not be blank.")
+    @Size(min = 3, message = "Cycle model should atleast contain 3 characters.")
     private String model;
 
     @Column(name = "type", length = 100)
+    @NotEmpty(message = "Cycle type should not be blank.")
+    @Size(min = 3, message = "Cycle type should atleast contain 3 characters.")
     private String type;
 
     @Column(name="booking_status", columnDefinition = "BOOLEAN DEFAULT false")

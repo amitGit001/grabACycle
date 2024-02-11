@@ -3,6 +3,7 @@ package com.grabACycle.grabACycle.controller;
 
 import com.grabACycle.grabACycle.services.UserService;
 import com.grabACycle.grabACycle.web.dto.UserRegistrationDto;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,7 +35,7 @@ public class UserRegistrationController {
 
 
     @PostMapping
-    public String registerUserAccount(@ModelAttribute("user") UserRegistrationDto registrationDto)
+    public String registerUserAccount(@Valid @ModelAttribute("user") UserRegistrationDto registrationDto)
     {
         userService.save(registrationDto);
 

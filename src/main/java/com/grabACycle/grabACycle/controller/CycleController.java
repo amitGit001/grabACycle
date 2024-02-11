@@ -4,6 +4,7 @@ package com.grabACycle.grabACycle.controller;
 import com.grabACycle.grabACycle.entity.Cycle;
 import com.grabACycle.grabACycle.services.CycleService;
 import com.grabACycle.grabACycle.web.dto.CycleDto;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -103,7 +104,7 @@ public class CycleController
     }
 
     @PostMapping("/createCycle")
-    public String saveCycle(@ModelAttribute("cycle") Cycle cycle, Model model,
+    public String saveCycle(@Valid @ModelAttribute("cycle") Cycle cycle, Model model,
                             @RequestParam(value = "sortField") String sortField,
                             @RequestParam(value = "sortDir") String sortDir,
                             @RequestParam(value = "returnToPage") int page)
@@ -124,7 +125,7 @@ public class CycleController
                                     @RequestParam(value = "returnToPage") int page,
                                     @RequestParam(value="sortField") String sortField,
                                     @RequestParam(value="sortDir") String sortDir,
-                                    Model model)
+                                    @Valid Model model)
     {
         System.out.println("Showing form");
         // get cycle from the service layer
