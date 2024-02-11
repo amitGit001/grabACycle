@@ -1,7 +1,9 @@
 package com.grabACycle.grabACycle.services.implementation;
 
 import com.grabACycle.grabACycle.dao.CycleRepository;
+import com.grabACycle.grabACycle.dao.UserRepository;
 import com.grabACycle.grabACycle.entity.Cycle;
+import com.grabACycle.grabACycle.entity.User;
 import com.grabACycle.grabACycle.services.CycleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
@@ -23,6 +25,9 @@ public class CycleServiceImplementation implements CycleService {
 
     @Autowired
     private CycleRepository cycleRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     @CachePut(cacheNames = "cycle")
@@ -94,21 +99,33 @@ public class CycleServiceImplementation implements CycleService {
     }
 
     @Override
-    public Cycle updateBookingStatus(int cycleId) {
+    public Cycle updateBookingStatus(int cycleId, int userId) {
 
-        Optional<Cycle> optional = cycleRepository.findById(cycleId);
+        Optional<Cycle> cycle = cycleRepository.findById(cycleId);
 
-        if(optional.isPresent()){
+        Optional<User> user = userRepository.findById(userId);
 
-            Cycle tempCycle=optional.get();
+        if(cycle.isPresent() && user.isPresent()){
 
-            boolean currentStatus = tempCycle.isBookingStatus();
+            Cycle tempCycle=cycle.get();
 
-            tempCycle.setBookingStatus(!currentStatus);
+            User tempUser = user.get();
 
-             cycleRepository.save(tempCycle);
+            if(!tempCycle.isBookingStatus())
+            {
+                tempCycle.setBookingStatus(true);
+                tempCycle.setBookedByUserId(tempUser.getId());
 
-             return tempCycle;
+                cycleRepository.save(tempCycle);
+            } else if (tempUser.getId() == tempCycle.getBookedByUserId() && tempCycle.isBookingStatus()) {
+                tempCycle.setBookingStatus(false);
+                tempCycle.setBookedByUserId(null);
+
+                cycleRepository.save(tempCycle);
+
+            }
+
+            return tempCycle;
         }
 
         return null;

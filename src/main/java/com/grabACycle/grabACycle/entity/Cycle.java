@@ -1,5 +1,7 @@
 package com.grabACycle.grabACycle.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -36,6 +38,30 @@ public class Cycle {
 
     @Column(name="booking_status", columnDefinition = "BOOLEAN DEFAULT false")
     private boolean bookingStatus;
+
+    @Column(name = "booked_by_user_id")
+    private Integer bookedByUserId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "booked_by_user_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private User bookedByUser;
+
+    public Integer getBookedByUserId() {
+        return bookedByUserId;
+    }
+
+    public void setBookedByUserId(Integer bookedByUserId) {
+        this.bookedByUserId = bookedByUserId;
+    }
+
+    public User getBookedByUser() {
+        return bookedByUser;
+    }
+
+    public void setBookedByUser(User bookedByUser) {
+        this.bookedByUser = bookedByUser;
+    }
 
     public Cycle(String name, String model, String type, boolean bookingStatus) {
         this.name = name;

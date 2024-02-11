@@ -143,13 +143,13 @@ public class CycleController
 
     }
 
-        @GetMapping("/updateBookingStatus/{id}")
+        @GetMapping("/updateBookingStatus/{cycleId}/{userId}")
         @ResponseBody
-        public Cycle updateBookingStatus(@PathVariable int id){
+        public Cycle updateBookingStatus(@PathVariable int cycleId, @PathVariable int userId ){
 
-            System.out.println(id);
+            System.out.println(cycleId + ", " + userId);
 
-           return cycleService.updateBookingStatus(id);
+           return cycleService.updateBookingStatus(cycleId, userId);
 
 
         }
