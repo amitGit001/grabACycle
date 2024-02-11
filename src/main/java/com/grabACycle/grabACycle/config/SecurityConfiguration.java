@@ -43,7 +43,7 @@ public class SecurityConfiguration {
                 .requestMatchers("/registration**", "/js/**", "/css/**", "/images/**").permitAll()
                 .anyRequest().authenticated());
 
-//        http.csrf().disable();
+        http.csrf().disable();
 
         http.formLogin(form -> form
                 .loginPage("/login")

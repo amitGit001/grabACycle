@@ -2,7 +2,15 @@ package com.grabACycle.grabACycle.exception.messages;
 
 public class JobExecutionErrorResponse {
     private String message;
-    private String status;
+    private int status;
+
+    public JobExecutionErrorResponse() {
+    }
+
+    public JobExecutionErrorResponse(String message, int status) {
+        this.message = message;
+        this.status = status;
+    }
 
     public String getMessage() {
         return message;
@@ -12,19 +20,11 @@ public class JobExecutionErrorResponse {
         this.message = message;
     }
 
-    public String getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public JobExecutionErrorResponse() {
-    }
-
-    public JobExecutionErrorResponse(String message, String status) {
-        this.message = message;
+    public void setStatus(int status) {
         this.status = status;
     }
 }

@@ -2,7 +2,15 @@ package com.grabACycle.grabACycle.exception.messages;
 
 public class InvalidSortFieldErrorResponse {
     private String message;
-    private String status;
+    private int status;
+
+    public InvalidSortFieldErrorResponse() {
+    }
+
+    public InvalidSortFieldErrorResponse(String message, int status) {
+        this.message = message;
+        this.status = status;
+    }
 
     public String getMessage() {
         return message;
@@ -12,19 +20,11 @@ public class InvalidSortFieldErrorResponse {
         this.message = message;
     }
 
-    public String getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(int status) {
         this.status = status;
     }
-    public InvalidSortFieldErrorResponse() {
-    }
-    public InvalidSortFieldErrorResponse(String message, String status) {
-        this.message = message;
-        this.status = status;
-    }
-
-
 }

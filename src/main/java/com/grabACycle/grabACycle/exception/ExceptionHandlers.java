@@ -23,7 +23,7 @@ public class ExceptionHandlers {
     public ResponseEntity<InvalidPageNumErrorResponse> handleInvalidPageNumberException(InvalidPageNumException e) {
        InvalidPageNumErrorResponse pageErrorResponse = new InvalidPageNumErrorResponse();
 
-        pageErrorResponse.setStatus(String.valueOf(HttpStatus.BAD_REQUEST.value()));
+        pageErrorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
         pageErrorResponse.setMessage(e.getMessage());
 
         return new ResponseEntity<>(pageErrorResponse, HttpStatus.BAD_REQUEST);
@@ -32,7 +32,7 @@ public class ExceptionHandlers {
     public ResponseEntity<InvalidSortFieldErrorResponse> handleInvalidSortFieldException(InvalidSortFieldException e) {
         InvalidSortFieldErrorResponse errorResponse = new InvalidSortFieldErrorResponse();
 
-        errorResponse.setStatus(String.valueOf(HttpStatus.BAD_REQUEST.value()));
+        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
         errorResponse.setMessage(e.getMessage());
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
@@ -41,7 +41,7 @@ public class ExceptionHandlers {
     public ResponseEntity<InvalidSortDirErrorResponse> handleInvalidSortDirException(InvalidSortDirException e) {
         InvalidSortDirErrorResponse errorResponse = new InvalidSortDirErrorResponse();
 
-        errorResponse.setStatus(String.valueOf(HttpStatus.BAD_REQUEST.value()));
+        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
         errorResponse.setMessage(e.getMessage());
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
@@ -60,7 +60,7 @@ public class ExceptionHandlers {
     public ResponseEntity<JobExecutionErrorResponse> handleJobExecutionException(JobExecutionException e) {
         JobExecutionErrorResponse errorResponse = new JobExecutionErrorResponse();
 
-        errorResponse.setStatus(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()));
+        errorResponse.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         errorResponse.setMessage("Error executing the job: " + e.getMessage());
 
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);

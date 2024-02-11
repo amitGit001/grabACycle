@@ -2,13 +2,13 @@ package com.grabACycle.grabACycle.exception.messages;
 
 public class InvalidPageNumErrorResponse {
     private String message;
-    private String status;
+    private int status;
 
-    public String getStatus() {
-        return status;
+    public InvalidPageNumErrorResponse() {
     }
 
-    public void setStatus(String status) {
+    public InvalidPageNumErrorResponse(String message, int status) {
+        this.message = message;
         this.status = status;
     }
 
@@ -19,12 +19,12 @@ public class InvalidPageNumErrorResponse {
     public void setMessage(String message) {
         this.message = message;
     }
-    public InvalidPageNumErrorResponse() {
 
+    public int getStatus() {
+        return status;
     }
 
-    public InvalidPageNumErrorResponse(String message, String status) {
-        this.message = message;
+    public void setStatus(int status) {
         this.status = status;
     }
 }

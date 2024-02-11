@@ -2,7 +2,15 @@ package com.grabACycle.grabACycle.exception.messages;
 
 public class InvalidSortDirErrorResponse {
     private String message;
-    private String status;
+    private int status;
+
+    public InvalidSortDirErrorResponse() {
+    }
+
+    public InvalidSortDirErrorResponse(String message, int status) {
+        this.message = message;
+        this.status = status;
+    }
 
     public String getMessage() {
         return message;
@@ -12,19 +20,11 @@ public class InvalidSortDirErrorResponse {
         this.message = message;
     }
 
-    public String getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public InvalidSortDirErrorResponse() {
-    }
-
-    public InvalidSortDirErrorResponse(String message, String status) {
-        this.message = message;
+    public void setStatus(int status) {
         this.status = status;
     }
 }

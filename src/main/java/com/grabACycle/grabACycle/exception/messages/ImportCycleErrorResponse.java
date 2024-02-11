@@ -3,6 +3,12 @@ package com.grabACycle.grabACycle.exception.messages;
 public class ImportCycleErrorResponse {
     private String message;
     private int status;
+    public ImportCycleErrorResponse() {
+    }
+    public ImportCycleErrorResponse(String message, int status) {
+        this.message = message;
+        this.status = status;
+    }
 
     public String getMessage() {
         return message;
@@ -20,11 +26,7 @@ public class ImportCycleErrorResponse {
         this.status = status;
     }
 
-    public ImportCycleErrorResponse(String message, int status) {
-        this.message = message;
-        this.status = status;
-    }
 
-    public ImportCycleErrorResponse() {
-    }
+
+
 }
