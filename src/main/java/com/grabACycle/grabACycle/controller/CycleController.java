@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 public class CycleController {
@@ -41,7 +42,8 @@ public class CycleController {
             throw new InvalidPageNumException("Page number must be greater than 0");
         }
 
-        if (sortField!= "id" && sortField != "booking_status" && sortField != "model" && sortField != "name" && sortField != "type" && sortField != "booked_by")
+
+        if (!sortField.equals("id") && !sortField.equals("bookingStatus") && !sortField.equals("model") && !sortField.equals("name") && !sortField.equals("type") && !sortField.equals("bookedBy"))
             throw new InvalidSortFieldException("Invalid sort field: " + sortField);
 
         Page<Cycle> page = cycleService.findPaginated(pageNo, pageSize, sortField, sortDir);
@@ -50,7 +52,7 @@ public class CycleController {
         if (pageNo > totalPages) {
             throw new InvalidPageNumException("Page number exceeds total pages");
         }
-        if(sortDir!="asc" && sortDir!="desc"){
+        if(!Objects.equals(sortDir, "asc") && !Objects.equals(sortDir, "desc")){
             throw new InvalidSortDirException("Invalid sort Direction: "+sortDir);
         }
 
@@ -81,7 +83,7 @@ public class CycleController {
             throw new InvalidPageNumException("Page number must be greater than 0");
         }
 
-        if (sortField!= "id" && sortField != "booking_status" && sortField != "model" && sortField != "name" && sortField != "type" && sortField != "booked_by")
+        if (!Objects.equals(sortField, "id") && !Objects.equals(sortField, "booking_status") && !Objects.equals(sortField, "model") && !Objects.equals(sortField, "name") && !Objects.equals(sortField, "type") && !Objects.equals(sortField, "booked_by"))
             throw new InvalidSortFieldException("Invalid sort field: " + sortField);
 
         Page<Cycle> page = cycleService.findPaginated(pageNo, pageSize, sortField, sortDir);
@@ -90,15 +92,13 @@ public class CycleController {
             throw new InvalidPageNumException("Page number exceeds total pages");
         }
 
-        if(sortDir!="asc" || sortDir!="desc"){
+        if(!Objects.equals(sortDir, "asc") || !sortDir.equals("desc")){
             throw new InvalidSortDirException("Invalid sort Direction: "+sortDir);
         }
         List<Cycle> listCycles = page.getContent();
         long totalItems = page.getTotalElements();
 
-        CycleDto cycleDto = new CycleDto(listCycles, totalItems);
-
-        return cycleDto;
+        return new CycleDto(listCycles, totalItems);
     }
 
     // Delete Cycle
@@ -128,7 +128,7 @@ public class CycleController {
         if(sortField == null || sortField.isEmpty()){
             throw new InvalidSortFieldException("Sort field parameter is missing or empty");
         }
-        if(sortDir == null || sortDir.isEmpty() || sortDir!="asc" || sortDir!="desc"){
+        if(!Objects.equals(sortDir, "asc") || !Objects.equals(sortDir, "desc")){
             throw new InvalidSortDirException("Invalid sort direction parameter");
         }
         // create model attribute to bind form data
