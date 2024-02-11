@@ -2,6 +2,7 @@ package com.grabACycle.grabACycle.controller;
 
 import com.grabACycle.grabACycle.dao.CycleRepository;
 import com.grabACycle.grabACycle.entity.Cycle;
+import com.grabACycle.grabACycle.exception.exceptions.CycleNotFoundException;
 import com.grabACycle.grabACycle.services.CycleService;
 import com.grabACycle.grabACycle.services.SearchService;
 import io.micrometer.core.instrument.search.Search;
@@ -32,6 +33,9 @@ public class SearchController {
         System.out.println(keyword);
         Page<Cycle> page = searchService.searchAllCyclesPaginated(pageNo, 15, sortField, sortDir, keyword);
         List<Cycle> listCycles = page.getContent();
+        if(listCycles.isEmpty()){
+            throw new CycleNotFoundException("No cycles found for the keyword : "+keyword);
+        }
         model.addAttribute("listCycles", listCycles);
         model.addAttribute("keyword", keyword);
         model.addAttribute("currentPage", pageNo);
@@ -56,6 +60,9 @@ public class SearchController {
         System.out.println(keyword);
         Page<Cycle> page = searchService.searchAllCyclesPaginated(pageNo, 15, sortField, sortDir, keyword);
         List<Cycle> listCycles = page.getContent();
+        if(listCycles.isEmpty()){
+            throw new  CycleNotFoundException("No cycles found for the keyword : "+keyword);
+        }
         model.addAttribute("listCycles", listCycles);
         model.addAttribute("keyword", keyword);
         model.addAttribute("currentPage", pageNo);

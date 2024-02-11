@@ -2,6 +2,7 @@ package com.grabACycle.grabACycle.controller;
 
 
 import com.grabACycle.grabACycle.entity.Cycle;
+import com.grabACycle.grabACycle.exception.exceptions.*;
 import com.grabACycle.grabACycle.services.CycleService;
 import com.grabACycle.grabACycle.web.dto.CycleDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,34 +14,47 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-public class CycleController
-{
+public class CycleController {
 
-    static int PAGE_SIZE= 12;
+    static int PAGE_SIZE = 12;
 
     private CycleService cycleService;
 
     @Autowired
-    public CycleController(CycleService cycleService)
-    {
-        this.cycleService=cycleService;
+    public CycleController(CycleService cycleService) {
+        this.cycleService = cycleService;
     }
 
 
     // Display list of cycles
     @GetMapping("/")
-    public String viewHomePage(Model model)
-    {
-        return findPaginated(1, "id","asc",model); // default page number=1
+    public String viewHomePage(Model model) {
+
+        return findPaginated(1, "id", "asc", model); // default page number=1
     }
+
     @GetMapping("/page/{pageNo}")
-    public String findPaginated(@PathVariable(value="pageNo") int pageNo, @RequestParam("sortField")  String sortField, @RequestParam("sortDir") String sortDir, Model model)
-    {
-        int pageSize= PAGE_SIZE; // we can take the pagesize from front end as well using path variable, or declare the size in application.properties
+    public String findPaginated(@PathVariable(value = "pageNo") int pageNo, @RequestParam("sortField") String sortField, @RequestParam("sortDir") String sortDir, Model model) {
+        int pageSize = PAGE_SIZE; // we can take the pagesize from front end as well using path variable, or declare the size in application.properties
 
-        Page<Cycle> page=cycleService.findPaginated(pageNo, pageSize,sortField, sortDir);
+        if (pageNo <= 0) {
+            throw new InvalidPageNumException("Page number must be greater than 0");
+        }
 
-        List<Cycle> listCycles=page.getContent();
+        if (sortField!= "id" && sortField != "booking_status" && sortField != "model" && sortField != "name" && sortField != "type" && sortField != "booked_by")
+            throw new InvalidSortFieldException("Invalid sort field: " + sortField);
+
+        Page<Cycle> page = cycleService.findPaginated(pageNo, pageSize, sortField, sortDir);
+
+        int totalPages=page.getTotalPages();
+        if (pageNo > totalPages) {
+            throw new InvalidPageNumException("Page number exceeds total pages");
+        }
+        if(sortDir!="asc" && sortDir!="desc"){
+            throw new InvalidSortDirException("Invalid sort Direction: "+sortDir);
+        }
+
+        List<Cycle> listCycles = page.getContent();
 
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPages", page.getTotalPages());
@@ -58,15 +72,29 @@ public class CycleController
     // fetches data of the specified page number
     @GetMapping("/cycles/page/{pageNo}")
     @ResponseBody
-    public CycleDto fetchPage(@PathVariable(value="pageNo") int pageNo, @RequestParam("sortField") String sortField, @RequestParam("sortDir") String sortDir){
+    public CycleDto fetchPage(@PathVariable(value = "pageNo") int pageNo, @RequestParam("sortField") String sortField, @RequestParam("sortDir") String sortDir) {
 
 
-        int pageSize= PAGE_SIZE; // we can take the pagesize from front end as well using path variable, or declare the size in application.properties
+        int pageSize = PAGE_SIZE; // we can take the pagesize from front end as well using path variable, or declare the size in application.properties
 
-        Page<Cycle> page = cycleService.findPaginated(pageNo, pageSize,sortField, sortDir);
+        if (pageNo <= 0) {
+            throw new InvalidPageNumException("Page number must be greater than 0");
+        }
 
-        List<Cycle> listCycles=page.getContent();
-        long totalItems= page.getTotalElements();
+        if (sortField!= "id" && sortField != "booking_status" && sortField != "model" && sortField != "name" && sortField != "type" && sortField != "booked_by")
+            throw new InvalidSortFieldException("Invalid sort field: " + sortField);
+
+        Page<Cycle> page = cycleService.findPaginated(pageNo, pageSize, sortField, sortDir);
+        int totalPages=page.getTotalPages();
+        if(pageNo > page.getTotalPages()){
+            throw new InvalidPageNumException("Page number exceeds total pages");
+        }
+
+        if(sortDir!="asc" || sortDir!="desc"){
+            throw new InvalidSortDirException("Invalid sort Direction: "+sortDir);
+        }
+        List<Cycle> listCycles = page.getContent();
+        long totalItems = page.getTotalElements();
 
         CycleDto cycleDto = new CycleDto(listCycles, totalItems);
 
@@ -76,24 +104,35 @@ public class CycleController
     // Delete Cycle
     @GetMapping("/deleteCycle/{id}")
     @ResponseBody
-    public CycleDto deleteCycle(@PathVariable(value="id") int cycleId, @RequestParam("page") int pageNo, @RequestParam("sortField") String sortField, @RequestParam("sortDir") String sortDir)
-    {
+    public CycleDto deleteCycle(@PathVariable(value = "id") int cycleId, @RequestParam("page") int pageNo, @RequestParam("sortField") String sortField, @RequestParam("sortDir") String sortDir) {
 
         // call delete cycle method
-        cycleService.deleteCycleById(cycleId);
-
-        return fetchPage(pageNo, sortField, sortDir);
+        try {
+            cycleService.deleteCycleById(cycleId);
+            return fetchPage(pageNo, sortField, sortDir);
+        } catch (CycleNotFoundException e) {
+            throw new CycleNotFoundException("Cycle with ID " + cycleId + " not found");
+        }
     }
 
     // Add a new Cycle form
     @GetMapping("/showNewCycleForm")
-    public String showNewCycleForm(@RequestParam(value="returnToPage") int page,
-                                   @RequestParam(value="sortField") String sortField,
-                                   @RequestParam(value="sortDir") String sortDir,
-                                   Model model)
-    {
+    public String showNewCycleForm(@RequestParam(value = "returnToPage") int page,
+                                   @RequestParam(value = "sortField") String sortField,
+                                   @RequestParam(value = "sortDir") String sortDir,
+                                   Model model) {
+        // Validate parameters
+        if (page <= 0) {
+            throw new InvalidPageNumException("Invalid value for returnToPage parameter");
+        }
+        if(sortField == null || sortField.isEmpty()){
+            throw new InvalidSortFieldException("Sort field parameter is missing or empty");
+        }
+        if(sortDir == null || sortDir.isEmpty() || sortDir!="asc" || sortDir!="desc"){
+            throw new InvalidSortDirException("Invalid sort direction parameter");
+        }
         // create model attribute to bind form data
-        Cycle cycle=new Cycle();
+        Cycle cycle = new Cycle();
         model.addAttribute("cycle", cycle); // thymleaf template will access this empty cycle object for binding form data
         model.addAttribute("returnToPage", page);
         model.addAttribute("sortField", sortField);
@@ -106,30 +145,35 @@ public class CycleController
     public String saveCycle(@ModelAttribute("cycle") Cycle cycle, Model model,
                             @RequestParam(value = "sortField") String sortField,
                             @RequestParam(value = "sortDir") String sortDir,
-                            @RequestParam(value = "returnToPage") int page)
-    {
+                            @RequestParam(value = "returnToPage") int page) {
         System.out.println(cycle);
-        // save cycle to database
-        cycleService.createCycle(cycle);
+        try {
+            // Save cycle to database
+            cycleService.createCycle(cycle);
+        } catch (Exception e) {
+            throw new CycleCreationException("Error occurred while saving the cycle");
+        }
 
 
         return "redirect:/page/" + page + "?sortField=" + sortField + "&sortDir=" + sortDir;
     }
 
 
-
     // Update cycle form
     @GetMapping("/showFormForUpdate/{id}")
     public String showFormForUpdate(@PathVariable int id,
                                     @RequestParam(value = "returnToPage") int page,
-                                    @RequestParam(value="sortField") String sortField,
-                                    @RequestParam(value="sortDir") String sortDir,
-                                    Model model)
-    {
+                                    @RequestParam(value = "sortField") String sortField,
+                                    @RequestParam(value = "sortDir") String sortDir,
+                                    Model model) {
         System.out.println("Showing form");
         // get cycle from the service layer
-        Cycle cycle= cycleService.fetchCycleById(id);
+        Cycle cycle = cycleService.fetchCycleById(id);
         System.out.println(cycle);
+        //If the cycle with the given id is not available , then throw an exception
+        if(cycle==null){
+            throw new CycleNotFoundException("Cycle with ID " + id + " not found");
+        }
         // set cycle as a model attribute to pre-populate the form data
         model.addAttribute("cycle", cycle);
         model.addAttribute("returnToPage", page);
@@ -137,22 +181,18 @@ public class CycleController
         model.addAttribute("sortDir", sortDir);
 
 
-
         return "update_cycle";
 
     }
 
-        @GetMapping("/updateBookingStatus/{id}")
-        @ResponseBody
-        public Cycle updateBookingStatus(@PathVariable int id){
-
+    @GetMapping("/updateBookingStatus/{id}")
+    @ResponseBody
+    public Cycle updateBookingStatus(@PathVariable int id) {
+        try {
             System.out.println(id);
-
-           return cycleService.updateBookingStatus(id);
-
-
+            return cycleService.updateBookingStatus(id);
+        } catch (CycleNotFoundException e) {
+            throw new CycleNotFoundException("Cycle with ID " + id + " not found");
         }
-
-
-
+    }
 }
