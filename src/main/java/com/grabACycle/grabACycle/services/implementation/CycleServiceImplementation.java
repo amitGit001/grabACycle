@@ -17,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -99,11 +100,11 @@ public class CycleServiceImplementation implements CycleService {
     }
 
     @Override
-    public Cycle updateBookingStatus(int cycleId, int userId) {
+    public Cycle updateBookingStatus(int cycleId, String userEmail) {
 
         Optional<Cycle> cycle = cycleRepository.findById(cycleId);
 
-        Optional<User> user = userRepository.findById(userId);
+        Optional<User> user = Optional.ofNullable(userRepository.findByEmail(userEmail));
 
         if(cycle.isPresent() && user.isPresent()){
 
@@ -114,12 +115,12 @@ public class CycleServiceImplementation implements CycleService {
             if(!tempCycle.isBookingStatus())
             {
                 tempCycle.setBookingStatus(true);
-                tempCycle.setBookedByUserId(tempUser.getId());
+                tempCycle.setBookedByUserEmail(tempUser.getEmail());
 
                 cycleRepository.save(tempCycle);
-            } else if (tempUser.getId() == tempCycle.getBookedByUserId() && tempCycle.isBookingStatus()) {
+            } else if (Objects.equals(tempUser.getEmail(), tempCycle.getBookedByUserEmail()) && tempCycle.isBookingStatus()) {
                 tempCycle.setBookingStatus(false);
-                tempCycle.setBookedByUserId(null);
+                tempCycle.setBookedByUserEmail(null);
 
                 cycleRepository.save(tempCycle);
 

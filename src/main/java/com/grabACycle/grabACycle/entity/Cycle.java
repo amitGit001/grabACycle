@@ -39,20 +39,20 @@ public class Cycle {
     @Column(name="booking_status", columnDefinition = "BOOLEAN DEFAULT false")
     private boolean bookingStatus;
 
-    @Column(name = "booked_by_user_id")
-    private Integer bookedByUserId;
+    @Column(name = "booked_by_email")
+    private String bookedByUserEmail;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "booked_by_user_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "booked_by_email", referencedColumnName = "email", insertable = false, updatable = false)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private User bookedByUser;
 
-    public Integer getBookedByUserId() {
-        return bookedByUserId;
+    public String getBookedByUserEmail() {
+        return bookedByUserEmail;
     }
 
-    public void setBookedByUserId(Integer bookedByUserId) {
-        this.bookedByUserId = bookedByUserId;
+    public void setBookedByUserEmail(String bookedByUserEmail) {
+        this.bookedByUserEmail = bookedByUserEmail;
     }
 
     public User getBookedByUser() {

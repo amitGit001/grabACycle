@@ -18,7 +18,7 @@ public interface CycleService {
 
     Cycle updateCycleById(int cycleId, Cycle cycle);
 
-    Cycle updateBookingStatus(int cycleId, int userId);
+    Cycle updateBookingStatus(int cycleId, String userEmail);
 
     void deleteCycleById(int cycleId);
 

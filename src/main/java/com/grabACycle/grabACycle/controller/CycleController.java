@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -143,13 +144,14 @@ public class CycleController
 
     }
 
-        @GetMapping("/updateBookingStatus/{cycleId}/{userId}")
+        @GetMapping("/updateBookingStatus/{cycleId}")
         @ResponseBody
-        public Cycle updateBookingStatus(@PathVariable int cycleId, @PathVariable int userId ){
+        public Cycle updateBookingStatus(@PathVariable int cycleId, Principal principal){
 
-            System.out.println(cycleId + ", " + userId);
+            String userEmail = principal.getName();
+            System.out.println(cycleId + ", " + userEmail);
 
-           return cycleService.updateBookingStatus(cycleId, userId);
+           return cycleService.updateBookingStatus(cycleId, userEmail);
 
 
         }
