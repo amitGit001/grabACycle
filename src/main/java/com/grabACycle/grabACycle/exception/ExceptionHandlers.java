@@ -1,10 +1,7 @@
 package com.grabACycle.grabACycle.exception;
 
 import com.grabACycle.grabACycle.exception.exceptions.*;
-import com.grabACycle.grabACycle.exception.messages.CycleErrorResponse;
-import com.grabACycle.grabACycle.exception.messages.InvalidPageNumErrorResponse;
-import com.grabACycle.grabACycle.exception.messages.InvalidSortDirErrorResponse;
-import com.grabACycle.grabACycle.exception.messages.InvalidSortFieldErrorResponse;
+import com.grabACycle.grabACycle.exception.messages.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -59,8 +56,15 @@ public class ExceptionHandlers {
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler
+    public ResponseEntity<JobExecutionErrorResponse> handleJobExecutionException(JobExecutionException e) {
+        JobExecutionErrorResponse errorResponse = new JobExecutionErrorResponse();
 
+        errorResponse.setStatus(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()));
+        errorResponse.setMessage("Error executing the job: " + e.getMessage());
 
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
 
 

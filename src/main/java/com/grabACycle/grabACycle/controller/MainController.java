@@ -18,14 +18,11 @@ public class MainController {
         if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
             // User is already logged in, redirect to the home page
             return "redirect:/";
+
         }
 
         // User is not logged in, show the login page
-
         return "login";
     }
-
-
-
 
 }
