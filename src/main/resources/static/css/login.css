@@ -45,7 +45,8 @@
   height: 60vh;
 }
 
-.login-form-container {
+.login-form-container,
+.registration-form-container {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -54,19 +55,24 @@
   flex-grow: 1;
 }
 
+.registration-form-container {
+  margin: 32px 0px;
+  margin-left: 90px;
+}
+
 .welcome-message {
   font-family: "Outfit", sans-serif;
   font-size: 40px;
   font-weight: 700;
 }
 
-.login-form {
+.login-registration-form {
   display: flex;
   flex-direction: column;
   gap: 30px;
 }
 
-.login-form input {
+.login-registration-form input {
   font-size: 15px;
   font-weight: 500;
   padding: 5px 10px;
@@ -76,16 +82,20 @@
   transition: all 0.05s ease-out;
 }
 
-.login-form input:focus {
+.login-registration-form input:focus {
   outline: none;
   border-bottom: 3px solid var(--theme-color);
 }
 
-.login-form input::placeholder {
+.login-registration-form input::placeholder {
   color: var(--dark-grey-color);
 }
 
-.login-form button {
+.login-registration-form input[type="date"]:invalid {
+  color: var(--dark-grey-color);
+}
+
+.login-registration-form button {
   background: var(--theme-color);
   border-radius: 3px;
   border: none;
@@ -98,11 +108,12 @@
   font-weight: 550;
 }
 
-.login-form button:hover {
+.login-registration-form button:hover {
   background: var(--theme-color-dark);
 }
 
-.register-container {
+.register-container,
+.login-container {
   align-self: center;
 }
 
@@ -117,7 +128,23 @@
   text-decoration: underline;
 }
 
-.error-message div {
+.login-container {
+  margin-top: 30px;
+}
+
+.login-container a {
+  margin-left: 8px;
+  color: #0a6de6;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.login a:hover {
+  text-decoration: underline;
+}
+
+.error-message,
+.registration-failure-message div {
   background: var(--light-red-color);
   padding: 6px 12px;
   border-radius: 3px;
@@ -125,7 +152,8 @@
   text-align: center;
 }
 
-.logged-out-message div {
+.logged-out-message,
+.successfully-registered-message div {
   padding: 6px 12px;
   border-radius: 3px;
   color: var(--theme-color);

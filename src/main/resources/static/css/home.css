@@ -1,8 +1,29 @@
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap");
 
-.cycles-list {
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Outfit", sans-serif;
+}
+
+:root {
+  --theme-color: #0a6de6;
+  --theme-color-dark: #2056c3;
+  --light-grey-color: #e7eaec;
+  --dark-grey-color: #8a99a3;
+  --light-red-color: #ffe1e2;
+  --dark-red-color: #c94a51;
+  --light-blue-color: #d3e1fd;
+  --extra-light-blue-color: #f4f8ff;
+  --extra-light-grey-color: #f8f8f8;
+  --extra-dark-grey-color: #5e707a;
+  --extra-dark-green-color: #00855d;
+  --light-green-color: #99eed8;
+}
+
+main {
   width: 100%;
-  height: 100%;
 
   display: flex;
   flex-direction: column;
@@ -10,15 +31,102 @@
   justify-content: center;
 }
 
+.cycles-list {
+}
+
 .cycles-list-table {
   font-family: Outfit, sans-serif;
   font-size: 16px;
-  margin: 8px;
+
   border-collapse: collapse;
+  border: 1px solid var(--light-grey-color);
+  border-top: none;
 }
 
-.cycles-list-table td,
-th {
-  border: 1px solid #ddd;
-  padding: 8px;
+.cycles-list-table thead {
+  background-color: var(--light-grey-color);
+}
+
+.cycles-list-table tr {
+  border-bottom: 1px solid var(--light-grey-color);
+}
+
+.cycles-list-table thead tr:first-child {
+  border: none;
+  margin: 2px solid var(--light-grey-color);
+}
+
+.cycles-list-table td {
+  padding: 12px 32px;
+}
+
+.cycles-list-table a {
+  text-decoration: none;
+  color: black;
+}
+
+.cycles-list-table a div {
+  width: 100%;
+
+  padding: 12px 32px;
+  border-bottom: 2px solid transparent;
+}
+
+.cycles-list-table a div:hover {
+  background-color: var(--extra-light-grey-color);
+  border-bottom: 2px solid var(--dark-grey-color);
+}
+
+.cycles-list-table .booked {
+  user-select: none;
+  color: var(--extra-dark-grey-color);
+  background-color: var(--light-grey-color);
+  border-radius: 30px;
+
+  padding: 3px 12px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.cycles-list-table .available {
+  user-select: none;
+  color: var(--extra-dark-green-color);
+  background-color: var(--light-green-color);
+  border-radius: 30px;
+
+  padding: 3px 11px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.hide {
+  display: none;
+}
+.show {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+
+.delete-cycle-btn {
+  background-color: transparent;
+  border: none;
+}
+
+.delete-cycle-btn span:hover {
+  color: #ff6970;
+  cursor: pointer;
+}
+
+.edit-cycle-btn:hover {
+  color: var(--theme-color);
 }

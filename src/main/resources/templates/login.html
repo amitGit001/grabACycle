@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="ISO-8859-1" />
-    <title>Registration and Login App</title>
+    <title>Login-GrabACycle</title>
 
     <link rel="stylesheet" type="text/css" th:href="@{/css/login.css}" />
   </head>
@@ -11,16 +11,19 @@
       <div class="content">
         <div class="content-wrapper">
           <div class="image-container">
-            <img th:src="@{/images/welcome-img.png}" alt="Sample Image" />
+            <img th:src="@{/images/welcome-img.png}" alt="Image" />
           </div>
 
           <div class="login-form-container">
             <div class="welcome-message">Grab A Cycle</div>
             <div class="form-container">
-              <form th:action="@{/login}" method="post" class="login-form">
+              <form
+                th:action="@{/login}"
+                method="post"
+                class="login-registration-form"
+              >
                 <input
                   type="text"
-                  class="form-control"
                   id="username"
                   name="username"
                   placeholder="Email"
@@ -31,7 +34,6 @@
                   type="password"
                   id="password"
                   name="password"
-                  class="form-control"
                   placeholder="Password"
                 />
 

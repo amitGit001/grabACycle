@@ -13,192 +13,242 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Home</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0"
+    />
   </head>
   <body>
     <div th:replace="fragments/header :: header"></div>
 
-
-
     <main>
-      <div class="cycles-list">
-        <!--    Displays Add Cycle Option To Admin Only -->
-        <div sec:authorize="hasRole('ROLE_ADMIN')">
-          <a
-            th:href="@{'/showNewCycleForm' + '?returnToPage=' + ${currentPage} + '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir} }"
-            >Add New Cycle</a
-          >
+      <div class="main-content">
+        <!-- Modal -->
+        <div id="booking-modal" class="hide">
+          <div class="model-content">
+            <div class="message"></div>
+            <div>
+              <button id="confirm-booking-btn">Confirm</button>
+              <button id="close-modal-btn">Close</button>
+            </div>
+          </div>
         </div>
 
-        <table class="cycles-list-table">
-          <thead>
-            <tr>
-              <th>
-                <a
-                  th:href="@{'/page/' + ${currentPage} + '?sortField=id&sortDir=' + ${reverseSortDir}}"
-                >
-                  id
-                </a>
-              </th>
-              <th>
-                <a
-                  th:href="@{'/page/' + ${currentPage} + '?sortField=name&sortDir=' + ${reverseSortDir}}"
-                >
-                  Name
-                </a>
-              </th>
-              <th>
-                <a
-                  th:href="@{'/page/' + ${currentPage} + '?sortField=model&sortDir=' + ${reverseSortDir}}"
-                >
-                  Model
-                </a>
-              </th>
+        <div class="cycles-list-header">
+          <!-- displays user name -->
+          <div class="welcome-user" sec:authorize="hasRole('ROLE_USER')">
+            Hi,<span sec:authentication="principal.username"> User</span>
+          </div>
+          <div class="welcome-user" sec:authorize="hasRole('ROLE_ADMIN')">
+            <span>Your Dashboard</span>
+          </div>
 
-              <th>
-                <a
-                  th:href="@{'/page/' + ${currentPage} + '?sortField=type&sortDir=' + ${reverseSortDir}}"
-                >
-                  Type
-                </a>
-              </th>
-
-              <th>
-                <a
-                  th:href="@{'/page/' + ${currentPage} + '?sortField=bookingStatus&sortDir=' + ${reverseSortDir}}"
-                >
-                  Status
-                </a>
-              </th>
-
-              <th sec:authorize="hasRole('ROLE_ADMIN')">Actions</th>
-            </tr>
-          </thead>
-          <tbody id="cycles-list-table">
-            <tr th:each="cycle, cycleInfo : ${listCycles}" th:id="${cycle.id}">
-              <td th:text="${cycle.id}"></td>
-              <td th:text="${cycle.name}"></td>
-              <td th:text="${cycle.model}"></td>
-              <td th:text="${cycle.type}"></td>
-
-              <!-- booking button -->
-              <td
-                sec:authorize="hasRole('ROLE_USER')"
-                th:onclick="'updateBookingStatus(' + ${cycle.id} + ')'"
-              >
-                <span th:if="${cycle.bookingStatus}" class="booked">Booked</span>
-                <span th:if="${!cycle.bookingStatus}" class="available">Available</span>
-              </td>
-
-              <td
-                      sec:authorize="hasRole('ROLE_ADMIN')"
-
-              >
-                <span th:if="${cycle.bookingStatus}" class="booked">Booked</span>
-                <span th:if="${!cycle.bookingStatus}" class="available">Available</span>
-              </td>
-
-<!--              action buttons -->
-              <td sec:authorize="hasRole('ROLE_ADMIN')">
-                <a
-                  th:href="@{'/showFormForUpdate/' + ${cycle.id} + '?returnToPage=' + ${currentPage} + '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir} }"
-                  >Update</a
-                >
-                <button
-                  th:attr="data-cycle-id=${cycle.id}, data-current-page=${currentPage}, data-sort-field=${sortField}, data-sort-dir=${sortDir}"
-                  onclick="deleteCycleById(this)"
-                >
-                  Delete
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
-        <!--    Pagination -->
-
-        <div th:if="${totalPages > 1}">
-          <div>
-            Total Rows:
-            <span id="total-items-data"> [[${totalItems}]] </span>
-            <div
-              th:with="startPage=${currentPage - 4 > 1 ? currentPage - 4 : 1}, endPage=${(startPage + 8) lt totalPages ? (startPage + 8) : totalPages}"
+          <!--    Displays Add Cycle Option To Admin Only -->
+          <div sec:authorize="hasRole('ROLE_ADMIN')">
+            <a
+              th:href="@{'/showNewCycleForm' + '?returnToPage=' + ${currentPage} + '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir} }"
+              >Add New Cycle</a
             >
-              <span th:each="i: ${#numbers.sequence(startPage, endPage)}">
+          </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="cycles-list">
+          <table class="cycles-list-table">
+            <thead>
+              <tr>
+                <th>
+                  <a
+                    th:href="@{'/page/' + ${currentPage} + '?sortField=id&sortDir=' + ${reverseSortDir}}"
+                  >
+                    <div>ID</div>
+                  </a>
+                </th>
+                <th>
+                  <a
+                    th:href="@{'/page/' + ${currentPage} + '?sortField=name&sortDir=' + ${reverseSortDir}}"
+                  >
+                    <div>Name</div>
+                  </a>
+                </th>
+                <th>
+                  <a
+                    th:href="@{'/page/' + ${currentPage} + '?sortField=model&sortDir=' + ${reverseSortDir}}"
+                  >
+                    <div>Model</div>
+                  </a>
+                </th>
+
+                <th>
+                  <a
+                    th:href="@{'/page/' + ${currentPage} + '?sortField=type&sortDir=' + ${reverseSortDir}}"
+                  >
+                    <div>Type</div>
+                  </a>
+                </th>
+
+                <th>
+                  <a
+                    th:href="@{'/page/' + ${currentPage} + '?sortField=bookingStatus&sortDir=' + ${reverseSortDir}}"
+                  >
+                    <div>Status</div>
+                  </a>
+                </th>
+
+                <th sec:authorize="hasRole('ROLE_ADMIN')">
+                  <div>Actions</div>
+                </th>
+              </tr>
+            </thead>
+            <tbody id="cycles-list-table">
+              <tr
+                th:each="cycle, cycleInfo : ${listCycles}"
+                th:id="${cycle.id}"
+              >
+                <td th:text="${cycle.id}"></td>
+                <td th:text="${cycle.name}"></td>
+                <td th:text="${cycle.model}"></td>
+                <td th:text="${cycle.type}"></td>
+
+                <!-- booking button -->
+                <td
+                  sec:authorize="hasRole('ROLE_USER')"
+                  th:onclick="'showBookingModal(' + ${cycle.id} + ')'"
+                >
+                  <span th:if="${cycle.bookingStatus}" class="booked"
+                    >Booked</span
+                  >
+                  <span th:if="${!cycle.bookingStatus}" class="available"
+                    >Available</span
+                  >
+                </td>
+
+                <td sec:authorize="hasRole('ROLE_ADMIN')">
+                  <span th:if="${cycle.bookingStatus}" class="booked"
+                    >Booked</span
+                  >
+                  <span th:if="${!cycle.bookingStatus}" class="available"
+                    >Available</span
+                  >
+                </td>
+
+                <!--              action buttons -->
+                <td sec:authorize="hasRole('ROLE_ADMIN')">
+                  <a
+                    class="edit-cycle-btn"
+                    th:href="@{'/showFormForUpdate/' + ${cycle.id} + '?returnToPage=' + ${currentPage} + '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir} }"
+                    ><span class="material-symbols-outlined"> edit </span></a
+                  >
+                  <button
+                    class="delete-cycle-btn"
+                    th:attr="data-cycle-id=${cycle.id}, data-current-page=${currentPage}, data-sort-field=${sortField}, data-sort-dir=${sortDir}"
+                    onclick="deleteCycleById(this)"
+                  >
+                    <span class="material-symbols-outlined"> delete </span>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!--    Pagination -->
+
+          <div th:if="${totalPages > 1}">
+            <div>
+              Total Rows:
+              <span id="total-items-data"> [[${totalItems}]] </span>
+              <div
+                th:with="startPage=${currentPage - 4 > 1 ? currentPage - 4 : 1}, endPage=${(startPage + 8) lt totalPages ? (startPage + 8) : totalPages}"
+              >
+                <span th:each="i: ${#numbers.sequence(startPage, endPage)}">
+                  <a
+                    th:if="${currentPage != i and !search}"
+                    th:href="@{'/page/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+                    >[[${i}]]</a
+                  >
+
+                  <!-- pages for search -->
+                  <a
+                    th:if="${currentPage != i and search}"
+                    th:href="@{'/search/' + ${keyword} + '/page/' + ${i}  + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+                    >[[${i}]]</a
+                  >
+
+                  <span th:unless="${currentPage !=i}">[[${i}]] </span> &nbsp;
+                  &nbsp;
+                </span>
+              </div>
+
+              <div>
                 <a
-                  th:if="${currentPage != i and !search}"
-                  th:href="@{'/page/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
-                  >[[${i}]]</a
+                  th:if="${currentPage > 1 and !search}"
+                  th:href="@{'/page/' + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+                  >Prev</a
                 >
 
                 <!-- pages for search -->
                 <a
-                  th:if="${currentPage != i and search}"
-                  th:href="@{'/search/' + ${keyword} + '/page/' + ${i}  + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
-                  >[[${i}]]</a
+                  th:if="${currentPage > 1 and search}"
+                  th:href="@{'/search/' + ${keyword} + '/page/'  + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+                  >Prev</a
+                >
+                <span th:unless="${currentPage > 1}">Prev</span>
+              </div>
+
+              <div>
+                <a
+                  th:if="${currentPage < totalPages and !search}"
+                  th:href="@{'/page/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+                  >Next</a
                 >
 
-                <span th:unless="${currentPage !=i}">[[${i}]] </span> &nbsp;
-                &nbsp;
-              </span>
-            </div>
+                <!-- pages for search -->
+                <a
+                  th:if="${currentPage < totalPages and search}"
+                  th:href="@{'/search/' + ${keyword} + '/page/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+                  >Next</a
+                >
+                <span th:unless="${currentPage < totalPages}">Next</span>
+              </div>
 
-            <div>
-              <a
-                th:if="${currentPage > 1 and !search}"
-                th:href="@{'/page/' + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
-                >Prev</a
-              >
+              <div>
+                <a
+                  th:if="${currentPage < totalPages and !search}"
+                  th:href="@{'/page/' + ${totalPages} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+                  >Last</a
+                >
 
-              <!-- pages for search -->
-              <a
-                th:if="${currentPage > 1 and search}"
-                th:href="@{'/search/' + ${keyword} + '/page/'  + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
-                >Prev</a
-              >
-              <span th:unless="${currentPage > 1}">Prev</span>
-            </div>
-
-            <div>
-              <a
-                th:if="${currentPage < totalPages and !search}"
-                th:href="@{'/page/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
-                >Next</a
-              >
-
-              <!-- pages for search -->
-              <a
-                th:if="${currentPage < totalPages and search}"
-                th:href="@{'/search/' + ${keyword} + '/page/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
-                >Next</a
-              >
-              <span th:unless="${currentPage < totalPages}">Next</span>
-            </div>
-
-            <div>
-              <a
-                th:if="${currentPage < totalPages and !search}"
-                th:href="@{'/page/' + ${totalPages} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
-                >Last</a
-              >
-
-              <!-- pages for search -->
-              <a
-                th:if="${currentPage < totalPages and search}"
-                th:href="@{'/search/' + ${keyword} + '/page/'  + ${totalPages} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
-                >Last</a
-              >
-              <span th:unless="${currentPage < totalPages}">Last</span>
+                <!-- pages for search -->
+                <a
+                  th:if="${currentPage < totalPages and search}"
+                  th:href="@{'/search/' + ${keyword} + '/page/'  + ${totalPages} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+                  >Last</a
+                >
+                <span th:unless="${currentPage < totalPages}">Last</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </main>
 
-    <div th:replace="fragments/footer :: footer"></div>
+    <!-- <div th:replace="fragments/footer :: footer"></div> -->
 
     <script src="/js/ajax.js"></script>
     <script src="/js/RefreshTable.js"></script>
-    <script src="/js/updateBookingStatus.js"></script>
+    <script
+      sec:authorize="hasRole('ROLE_USER')"
+      src="/js/updateBookingStatus.js"
+    ></script>
     <script
       sec:authorize="hasRole('ROLE_ADMIN')"
       src="/js/DeleteCycle.js"

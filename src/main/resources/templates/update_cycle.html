@@ -1,22 +1,52 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Update A Cycle</title>
 
-<div th:replace="~{fragments/header :: header}"></div>
-<form  th:object="${cycle}" method="POST" th:action="@{'/createCycle?returnToPage=' + ${returnToPage} + '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}">
-    <input type="hidden" th:field="*{id}">
-    <input type="text" th:field="*{name}" >
-    <input type="text" th:field="*{model}" >
-    <input type="text" th:field="*{type}" >
+    <link rel="stylesheet" type="text/css" th:href="@{/css/addCycle.css}" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@40,500,0,0"
+    />
+  </head>
+  <body>
+    <!-- <div th:replace="~{fragments/header :: header}"></div> -->
 
-    <button type="submit">Save</button>
-</form>
+    <div class="content">
+      <div class="content-wrapper">
+        <div class="title-bar">
+          <div class="back-to-home">
+            <a th:href="@{/}">
+              <span class="material-symbols-outlined"> arrow_back </span>
+            </a>
+          </div>
+          <div class="title">Update A Cycle</div>
+        </div>
 
-<a th:href="@{/}"> Home </a>
-<div th:replace="~{fragments/footer :: footer}"></div>
-</body>
+        <div class="form-container">
+          <form
+            id="create-cycle-form"
+            onsubmit="return handleFormSubmit()"
+            th:object="${cycle}"
+            method="POST"
+            th:action="@{'/createCycle?returnToPage=' + ${returnToPage} + '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+          >
+            <input type="hidden" th:field="*{id}" />
+            <input type="text" th:field="*{name}" placeholder="Cycle Name" />
+            <input type="text" th:field="*{model}" placeholder="Cycle Model" />
+            <input type="text" th:field="*{type}" placeholder="Cycle Type" />
+
+            <button type="submit">Save</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div th:replace="~{fragments/footer :: footer}"></div> -->
+    <script
+      sec:authorize="hasRole('ROLE_ADMIN')"
+      src="/js/HandleFormSubmit.js"
+    ></script>
+  </body>
 </html>

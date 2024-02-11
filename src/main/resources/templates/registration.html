@@ -1,90 +1,97 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="UTF-8">
-    <title>Registration</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Registration-GrabACycle</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/login.css}" />
+  </head>
+  <body>
+    <main>
+      <div class="content">
+        <div class="content-wrapper">
+          <div class="image-container">
+            <img th:src="@{/images/welcome-img.png}" alt="Image" />
+          </div>
 
-</head>
-<body>
+          <div class="registration-form-container">
+            <div class="form-container">
+              <form
+                id="registration-form"
+                th:action="@{/registration}"
+                method="POST"
+                th:object="${user}"
+                class="login-registration-form"
+                onsubmit="return handleRegistrationFormSubmit()"
+              >
+                <input
+                  id="firstName"
+                  th:field="*{firstName}"
+                  required
+                  autofocus="autofocus"
+                  type="text"
+                  placeholder="First Name"
+                />
 
-<!--nav bar-->
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed"
-                    data-toggle="collapse" data-target="#navbar" aria-expanded="false"
-                    aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span> <span
-                    class="icon-bar"></span> <span class="icon-bar"></span> <span
-                    class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#" th:href="@{/}">Registration and
-                Login Module</a>
-        </div>
-    </div>
-</nav>
+                <input
+                  id="lastName"
+                  th:field="*{lastName}"
+                  required
+                  type="text"
+                  placeholder="Last Name"
+                />
 
-<!--Registration Form    -->
-<div class="container">
-    <div class="row">
-        <div class="col-md-6 col-md-offset-3">
-            <!--            success message -->
-            <div th:if="${param.success}">
-                <div class="alert alert-info">You've Successfully registered.</div>
+                <input
+                  id="email"
+                  th:field="*{email}"
+                  required
+                  type="text"
+                  placeholder="Email"
+                />
+
+                <input id="dob" type="date" th:field="*{dob}" required />
+
+                <input
+                  type="password"
+                  id="password"
+                  th:field="*{password}"
+                  required
+                  placeholder="Password"
+                />
+
+                <input
+                  type="password"
+                  id="confirm-password"
+                  required
+                  placeholder="Confirm Password"
+                />
+
+                <!-- Success message -->
+                <div
+                  th:if="${param.success}"
+                  class="successfully-registered-message"
+                >
+                  <div>You've Successfully Registered</div>
+                </div>
+
+                <div
+                  th:if="${param.failure}"
+                  class="registration-failure-message"
+                >
+                  <div>Email Already Exists</div>
+                </div>
+
+                <button type="submit">Register</button>
+              </form>
             </div>
-
-            <h1> Registration </h1>
-            <form th:action="@{/registration}" method="POST" th:object="${user}">
-                <div class="form-group">
-                    <label class="control-label" for="firstName">
-                        First Name
-                    </label>
-                    <input id="firstName" class="form-control" th:field="*{firstName}" required autofocus="autofocus"/>
-
-                </div>
-                <div class="form-group">
-                    <label class="control-label" for="lastName">
-                        Last Name
-                    </label>
-                    <input id="lastName" class="form-control" th:field="*{lastName}" required/>
-
-                </div>
-
-                <div class="form-group">
-                    <label class="control-label" for="dob">
-                        Date of Birth
-                    </label>
-                    <input id="dob" class="form-control" type="date" th:field="*{dob}" required/>
-                </div>
-
-                <div class="form-group">
-                    <label class="control-label" for="email">
-                        Email
-                    </label>
-                    <input id="email" class="form-control" th:field="*{email}" required/>
-
-                </div>
-                <div class="form-group">
-                    <label class="control-label" for="password">
-                        Password
-                    </label>
-                    <input type="password" id="password" class="form-control" th:field="*{password}" required/>
-
-                </div>
-                <div class="form-group m-5">
-                    <button type="submit" class="btn btn-success">Register</button>
-                    <span>Already Registered? <a href="/" th:href="@{/login}">Login</a></span>
-                </div>
-            </form>
-
+            <div class="login-container">
+              <span
+                >Already Registered?
+                <a href="/" th:href="@{/login}">Login</a></span
+              >
+            </div>
+          </div>
         </div>
-    </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-        crossorigin="anonymous"></script>
-</body>
+      </div>
+    </main>
+  </body>
 </html>

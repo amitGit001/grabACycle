@@ -21,11 +21,18 @@ function refreshTable(data, currentPage, sortField, sortDir) {
     typeCell.textContent = cycle.type;
 
     let statusCell = row.insertCell(4);
-    statusCell.textContent = cycle.bookingStatus;
+    if (cycle.bookingStatus) {
+      let elem = `<div> <span class="booked">Booked</span> </div>`;
+      statusCell.innerHTML = elem;
+    } else {
+      let elem = `<div> <span class="available">Booked</span> </div>`;
+      statusCell.innerHTML = elem;
+    }
+    // statusCell.textContent = cycle.bookingStatus;
 
     let actionsCell = row.insertCell(5);
 
-    let actionsButtons = `<div> <a href='/showFormForUpdate/${cycle.id}?returnToPage=${currentPage}&sortField=${sortField}&sortDir=${sortDir}'>Update</a> <button onclick='deleteCycleById(this)' data-cycle-id='${cycle.id}' data-current-page='${currentPage}' data-sort-field='${sortField}' data-sort-dir='${sortDir}'>Delete</button> </div>`;
+    let actionsButtons = `<div> <a class="edit-cycle-btn" href='/showFormForUpdate/${cycle.id}?returnToPage=${currentPage}&sortField=${sortField}&sortDir=${sortDir}'><span class="material-symbols-outlined"> edit </span></a> <button  class="delete-cycle-btn" onclick='deleteCycleById(this)' data-cycle-id='${cycle.id}' data-current-page='${currentPage}' data-sort-field='${sortField}' data-sort-dir='${sortDir}'><span class="material-symbols-outlined"> delete </span></button> </div>`;
 
     actionsCell.innerHTML = actionsButtons;
   });
