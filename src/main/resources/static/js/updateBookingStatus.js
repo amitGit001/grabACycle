@@ -51,12 +51,14 @@ function updateBookingStatus(cycleId) {
     let cell = row.querySelector(`td:nth-child(5) span`);
 
     if (status) {
-      cell.innerText = "Booked";
+      cell.innerText = "Unbook";
+      cell.classList.remove("booked");
       cell.classList.remove("available");
-      cell.classList.add("booked");
+      cell.classList.add("unbook");
     } else {
       cell.innerText = "Available";
       cell.classList.remove("booked");
+      cell.classList.remove("unbook");
       cell.classList.add("available");
     }
   }

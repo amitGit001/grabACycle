@@ -34,9 +34,9 @@
       <div class="main-content">
         <!-- Modal -->
         <div id="booking-modal" class="hide">
-          <div class="model-content">
-            <div class="message"></div>
-            <div>
+          <div class="modal-content">
+            <div class="message">Confirm Action?</div>
+            <div class="modal-btns">
               <button id="confirm-booking-btn">Confirm</button>
               <button id="close-modal-btn">Close</button>
             </div>
@@ -46,17 +46,18 @@
         <div class="cycles-list-header">
           <!-- displays user name -->
           <div class="welcome-user" sec:authorize="hasRole('ROLE_USER')">
-            Hi,<span sec:authentication="principal.username"> User</span>
+            <span>Hi,</span>
+            <span sec:authentication="principal.username"> User</span>
           </div>
           <div class="welcome-user" sec:authorize="hasRole('ROLE_ADMIN')">
             <span>Your Dashboard</span>
           </div>
 
           <!--    Displays Add Cycle Option To Admin Only -->
-          <div sec:authorize="hasRole('ROLE_ADMIN')">
+          <div class="add-cycle-btn" sec:authorize="hasRole('ROLE_ADMIN')">
             <a
               th:href="@{'/showNewCycleForm' + '?returnToPage=' + ${currentPage} + '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir} }"
-              >Add New Cycle</a
+              ><span class="material-symbols-outlined"> add </span>Add Cycle</a
             >
           </div>
         </div>
@@ -120,14 +121,22 @@
                 <td th:text="${cycle.type}"></td>
 
                 <!-- booking button -->
-                <td
-                  sec:authorize="hasRole('ROLE_USER')"
-                  th:onclick="'showBookingModal(' + ${cycle.id} + ')'"
-                >
-                  <span th:if="${cycle.bookingStatus}" class="booked"
+                <td sec:authorize="hasRole('ROLE_USER')">
+                  <span
+                    th:onclick="'showBookingModal(' + ${cycle.id} + ')'"
+                    th:if="${cycle.bookingStatus and cycle.bookedByUserEmail == #authentication.name}"
+                    class="unbook"
+                    >Unbook</span
+                  >
+                  <span
+                    th:if="${cycle.bookingStatus and cycle.bookedByUserEmail != #authentication.name}"
+                    class="booked"
                     >Booked</span
                   >
-                  <span th:if="${!cycle.bookingStatus}" class="available"
+                  <span
+                    th:onclick="'showBookingModal(' + ${cycle.id} + ')'"
+                    th:if="${!cycle.bookingStatus}"
+                    class="available"
                     >Available</span
                   >
                 </td>
@@ -160,16 +169,63 @@
             </tbody>
           </table>
 
-          <!--    Pagination -->
+          <!--   PAGINATION  -->
+          <div class="pagination-container" th:if="${totalPages > 1}">
+            <div class="pagination">
+              <!-- SHOWS FIRST AND PREV BTNS -->
+              <div class="first-prev-btns page-btns">
+                <!-- first page button -->
+                <div class="first-btn-container">
+                  <a
+                    class="active-btn"
+                    th:if="${currentPage!=1 and !search}"
+                    th:href="@{'/page/1'  + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+                    >First</a
+                  >
 
-          <div th:if="${totalPages > 1}">
-            <div>
-              Total Rows:
-              <span id="total-items-data"> [[${totalItems}]] </span>
+                  <!-- pages for search -->
+                  <a
+                    class="active-btn"
+                    th:if="${currentPage!=1 and search}"
+                    th:href="@{'/search/' + ${keyword} + '/page/1'  + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+                    >First</a
+                  >
+                  <span class="inactive-btn" th:unless="${currentPage!=1}"
+                    >First</span
+                  >
+                </div>
+
+                <!-- prev button -->
+                <div class="prev-btn-container">
+                  <a
+                    class="active-btn"
+                    th:if="${currentPage > 1 and !search}"
+                    th:href="@{'/page/' + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+                    >Prev</a
+                  >
+
+                  <!-- pages for search -->
+                  <a
+                    class="active-btn"
+                    th:if="${currentPage > 1 and search}"
+                    th:href="@{'/search/' + ${keyword} + '/page/'  + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+                    >Prev</a
+                  >
+                  <span class="inactive-btn" th:unless="${currentPage > 1}"
+                    >Prev</span
+                  >
+                </div>
+              </div>
+
+              <!-- shows page numbers -->
               <div
-                th:with="startPage=${currentPage - 4 > 1 ? currentPage - 4 : 1}, endPage=${(startPage + 8) lt totalPages ? (startPage + 8) : totalPages}"
+                class="page-list"
+                th:with="startPage=${ (currentPage - 4) > 1 ?  currentPage - 4 : 1}, endPage=${(startPage + 8) lt totalPages ? (startPage + 8) : totalPages}"
               >
-                <span th:each="i: ${#numbers.sequence(startPage, endPage)}">
+                <div
+                  class="page-num"
+                  th:each="i: ${#numbers.sequence(startPage, endPage)}"
+                >
                   <a
                     th:if="${currentPage != i and !search}"
                     th:href="@{'/page/' + ${i} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
@@ -183,60 +239,67 @@
                     >[[${i}]]</a
                   >
 
-                  <span th:unless="${currentPage !=i}">[[${i}]] </span> &nbsp;
-                  &nbsp;
-                </span>
+                  <div th:unless="${currentPage !=i}">[[${i}]]</div>
+                </div>
               </div>
 
-              <div>
-                <a
-                  th:if="${currentPage > 1 and !search}"
-                  th:href="@{'/page/' + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
-                  >Prev</a
-                >
+              <!-- SHOWS NEXT AND LAST PAGE BUTTONS -->
+              <div class="next-last-btns page-btns">
+                <!-- next button -->
+                <div class="next-btn">
+                  <a
+                    class="active-btn"
+                    th:if="${currentPage < totalPages and !search}"
+                    th:href="@{'/page/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+                    >Next</a
+                  >
 
-                <!-- pages for search -->
-                <a
-                  th:if="${currentPage > 1 and search}"
-                  th:href="@{'/search/' + ${keyword} + '/page/'  + ${currentPage - 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
-                  >Prev</a
-                >
-                <span th:unless="${currentPage > 1}">Prev</span>
-              </div>
+                  <!-- pages for search -->
+                  <a
+                    class="active-btn"
+                    th:if="${currentPage < totalPages and search}"
+                    th:href="@{'/search/' + ${keyword} + '/page/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+                    >Next</a
+                  >
+                  <span
+                    class="inactive-btn"
+                    th:unless="${currentPage < totalPages}"
+                    >Next</span
+                  >
+                </div>
 
-              <div>
-                <a
-                  th:if="${currentPage < totalPages and !search}"
-                  th:href="@{'/page/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
-                  >Next</a
-                >
+                <!-- last button -->
+                <div class="last-btn">
+                  <a
+                    class="active-btn"
+                    th:if="${currentPage < totalPages and !search}"
+                    th:href="@{'/page/' + ${totalPages} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+                    >Last</a
+                  >
 
-                <!-- pages for search -->
-                <a
-                  th:if="${currentPage < totalPages and search}"
-                  th:href="@{'/search/' + ${keyword} + '/page/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
-                  >Next</a
-                >
-                <span th:unless="${currentPage < totalPages}">Next</span>
-              </div>
-
-              <div>
-                <a
-                  th:if="${currentPage < totalPages and !search}"
-                  th:href="@{'/page/' + ${totalPages} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
-                  >Last</a
-                >
-
-                <!-- pages for search -->
-                <a
-                  th:if="${currentPage < totalPages and search}"
-                  th:href="@{'/search/' + ${keyword} + '/page/'  + ${totalPages} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
-                  >Last</a
-                >
-                <span th:unless="${currentPage < totalPages}">Last</span>
+                  <!-- pages for search -->
+                  <a
+                    class="active-btn"
+                    th:if="${currentPage < totalPages and search}"
+                    th:href="@{'/search/' + ${keyword} + '/page/'  + ${totalPages} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
+                    >Last</a
+                  >
+                  <span
+                    class="inactive-btn"
+                    th:unless="${currentPage < totalPages}"
+                    >Last</span
+                  >
+                </div>
               </div>
             </div>
           </div>
+
+          <!-- SHOWS TOTAL NUMBER OF CYCLES -->
+          <span class="total-cycles">
+            Total Cycles &nbsp; &nbsp;<span id="total-items-data">
+              [[${totalItems}]]</span
+            >
+          </span>
         </div>
       </div>
     </main>
