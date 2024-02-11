@@ -7,11 +7,11 @@ import java.time.LocalDate;
 public class UserRegistrationDto {
 
     @NotEmpty(message = "First Name can not be blank.")
-    @Size(min = 3, message = "First Name should atleast contain 3 characters.")
+    @Size(min = 2, message = "First Name should atleast contain 2 characters.")
     private String firstName;
 
     @NotEmpty(message = "Last Name can not be blank.")
-    @Size(min = 3, message = "Last Name should atleast contain 3 characters.")
+    @Size(min = 2, message = "Last Name should atleast contain 2 characters.")
     private String lastName;
 
     @Email(message = "Invalid email.", regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}")
