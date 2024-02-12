@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class CycleRestController {
@@ -26,27 +27,27 @@ public class CycleRestController {
         return cycleService.fetchCycles();
     }
 
-//    @GetMapping("/cycle/{cycleId}")
-//    public Optional<Cycle> getCycleById(@PathVariable int cycleId)
-//    {
-//        return cycleService.fetchCycleById(cycleId);
-//    }
-//
-//    @PutMapping("/cycle")
-//    public Cycle updateCycle(@RequestBody Cycle cycle)
-//    {
-//        return cycleService.updateCycle(cycle);
-//    }
-//
-//    @PatchMapping("/cycle/{cycleId}")
-//    public Cycle updateCycleById(@PathVariable int cycleId, @PathVariable Cycle cycle)
-//    {
-//        return cycleService.updateCycleById(cycleId, cycle);
-//    }
-//
-//    @DeleteMapping("/cycle/{cycleId}")
-//    public void deleteCycle(@PathVariable int cycleId)
-//    {
-//        cycleService.deleteCycle(cycleId);
-//    }
+    @GetMapping("/cycle/{cycleId}")
+    public Optional<Cycle> getCycleById(@PathVariable int cycleId)
+    {
+        return Optional.ofNullable(cycleService.fetchCycleById(cycleId));
+    }
+
+    @PutMapping("/cycle")
+    public Cycle updateCycle(@RequestBody Cycle cycle)
+    {
+        return cycleService.updateCycle(cycle);
+    }
+
+    @PatchMapping("/cycle/{cycleId}")
+    public Cycle updateCycleById(@PathVariable int cycleId, @RequestBody Cycle cycle)
+    {
+        return cycleService.updateCycleById(cycleId, cycle);
+    }
+
+    @DeleteMapping("/cycle/{cycleId}")
+    public void deleteCycle(@PathVariable int cycleId)
+    {
+        cycleService.deleteCycleById(cycleId);
+    }
 }

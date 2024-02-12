@@ -1,4 +1,4 @@
-package com.grabACycle.grabACycle.controller;
+package com.grabACycle.grabACycle.restcontroller;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/jobs")
-public class JobController {
+public class JobRestController {
 
     @Autowired
     private JobLauncher jobLauncher;

@@ -39,12 +39,12 @@ public class UserRestController {
     }
 
     @PatchMapping("/user/{userId}")
-    public User updateUserById(@PathVariable int userId, @PathVariable User user)
+    public User updateUserById(@PathVariable int userId, @RequestBody User user)
     {
         return userService.updateUserById(userId, user);
     }
 
-    @DeleteMapping("/user")
+    @DeleteMapping("/user/{userId}")
     public void deleteUser(@PathVariable int userId)
     {
         userService.deleteUser(userId);
