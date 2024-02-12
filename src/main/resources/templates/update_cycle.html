@@ -27,7 +27,7 @@
         <div class="form-container">
           <form
             id="create-cycle-form"
-            onsubmit="return handleFormSubmit()"
+            onsubmit="return handleUpdateCycleFormSubmit()"
             th:object="${cycle}"
             method="POST"
             th:action="@{'/createCycle?returnToPage=' + ${returnToPage} + '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"

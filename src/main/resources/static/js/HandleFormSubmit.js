@@ -5,12 +5,17 @@ function handleCreateCycleFormSubmit() {
   let model = addCycleForm.namedItem("model").value;
   let type = addCycleForm.namedItem("type").value;
 
-  if (name.length < 2 || model.length === 0 || type.length === 0) {
-    alert("Please check your entries");
+  if (name.length < 2 || model.length < 2 || type.length < 2) {
+    alert("Entry length cannot be less than 2");
     return false;
   }
 
   return true;
+}
+
+// update cycle form handler
+function handleUpdateCycleFormSubmit() {
+  return handleCreateCycleFormSubmit();
 }
 
 // registration form submit handler
