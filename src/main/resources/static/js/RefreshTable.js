@@ -21,11 +21,12 @@ function refreshTable(data, currentPage, sortField, sortDir) {
     typeCell.textContent = cycle.type;
 
     let statusCell = row.insertCell(4);
+
     if (cycle.bookingStatus) {
       let elem = `<div> <span class="booked">Booked</span> </div>`;
       statusCell.innerHTML = elem;
     } else {
-      let elem = `<div> <span class="available">Booked</span> </div>`;
+      let elem = `<div> <span class="available">Available</span> </div>`;
       statusCell.innerHTML = elem;
     }
     // statusCell.textContent = cycle.bookingStatus;

@@ -40,7 +40,7 @@ public class CycleServiceImplementation implements CycleService {
         tempCycle.setName(cycle.getName());
         tempCycle.setModel(cycle.getModel());
         tempCycle.setType(cycle.getType());
-        tempCycle.setBookingStatus(false);
+        tempCycle.setBookingStatus(cycle.isBookingStatus());
 
         return cycleRepository.save(tempCycle);
     }
