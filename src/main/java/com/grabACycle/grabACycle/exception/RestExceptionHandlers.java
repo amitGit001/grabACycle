@@ -1,4 +1,4 @@
-package com.grabACycle.grabACycle.exceptions;
+package com.grabACycle.grabACycle.exception;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -8,13 +8,14 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 @RestControllerAdvice
-public class GlobalExceptionHandler {
+public class RestExceptionHandlers {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleMethodArgsNotValidException(MethodArgumentNotValidException ex)
@@ -39,6 +40,17 @@ public class GlobalExceptionHandler {
         for (ConstraintViolation<?> violation : violations) {
             response.put(violation.getPropertyPath().toString(), violation.getMessage());
         }
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<Map<String, String>> handleMethodArgsMismatchException(MethodArgumentTypeMismatchException ex) {
+        Map<String, String> response = new HashMap<>();
+
+        String paramName = ex.getName();
+        String errorMessage = "Type mismatch for parameter '" + paramName + "'";
+        response.put("error", errorMessage);
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }

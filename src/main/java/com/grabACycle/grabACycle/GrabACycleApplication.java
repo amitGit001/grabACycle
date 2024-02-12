@@ -1,7 +1,8 @@
 package com.grabACycle.grabACycle;
 
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
@@ -9,7 +10,7 @@ import org.springframework.cache.annotation.EnableCaching;
 @SpringBootApplication
 @EnableCaching
 public class GrabACycleApplication {
-	private static final Logger logger = LogManager.getLogger(GrabACycleApplication.class);
+	private static final Logger logger = LoggerFactory.getLogger(GrabACycleApplication.class);
 
 
 	public static void main(String[] args) {

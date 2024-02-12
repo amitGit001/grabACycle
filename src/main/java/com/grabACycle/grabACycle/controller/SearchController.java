@@ -5,6 +5,8 @@ import com.grabACycle.grabACycle.entity.Cycle;
 import com.grabACycle.grabACycle.services.CycleService;
 import com.grabACycle.grabACycle.services.SearchService;
 import io.micrometer.core.instrument.search.Search;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
@@ -17,6 +19,9 @@ import java.util.List;
 
 @Controller
 public class SearchController {
+    private static final Logger logger = LoggerFactory.getLogger(SearchController.class);
+
+    private int PAGE_SIZE=20;
 
     @Autowired
     private SearchService searchService;
@@ -29,9 +34,12 @@ public class SearchController {
                                  @RequestParam("sortDir") String sortDir ,
                                  @ModelAttribute("keyword") String keyword)
     {
-        System.out.println(keyword);
-        Page<Cycle> page = searchService.searchAllCyclesPaginated(pageNo, 15, sortField, sortDir, keyword);
+        logger.info("Request received to search cycles by keyword: {}", keyword);
+        Page<Cycle> page = searchService.searchAllCyclesPaginated(pageNo, PAGE_SIZE, sortField, sortDir, keyword);
         List<Cycle> listCycles = page.getContent();
+        if(listCycles.isEmpty()) {
+            logger.warn("No cycles found for the keyword: {}", keyword);
+        }
         model.addAttribute("listCycles", listCycles);
         model.addAttribute("keyword", keyword);
         model.addAttribute("currentPage", pageNo);
@@ -53,9 +61,12 @@ public class SearchController {
                                  @RequestParam("sortDir") String sortDir ,
                                  @PathVariable String keyword)
     {
-        System.out.println(keyword);
-        Page<Cycle> page = searchService.searchAllCyclesPaginated(pageNo, 15, sortField, sortDir, keyword);
+        logger.info("Request received to search cycles by keyword: {}", keyword);
+        Page<Cycle> page = searchService.searchAllCyclesPaginated(pageNo, PAGE_SIZE, sortField, sortDir, keyword);
         List<Cycle> listCycles = page.getContent();
+        if(listCycles.isEmpty()) {
+            logger.warn("No cycles found for the keyword: {}", keyword);
+        }
         model.addAttribute("listCycles", listCycles);
         model.addAttribute("keyword", keyword);
         model.addAttribute("currentPage", pageNo);
