@@ -22,7 +22,7 @@ public class ExceptionHandlers {
     }
     @ExceptionHandler
     public ResponseEntity<InvalidPageNumErrorResponse> handleInvalidPageNumberException(InvalidPageNumException e) {
-       InvalidPageNumErrorResponse pageErrorResponse = new InvalidPageNumErrorResponse();
+        InvalidPageNumErrorResponse pageErrorResponse = new InvalidPageNumErrorResponse();
 
         pageErrorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
         pageErrorResponse.setMessage(e.getMessage());

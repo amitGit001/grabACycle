@@ -1,6 +1,8 @@
 package com.grabACycle.grabACycle.controller;
 
 import com.grabACycle.grabACycle.exception.exceptions.JobExecutionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
@@ -17,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/jobs")
 public class JobController {
-
+    private static final Logger logger = LoggerFactory.getLogger(JobController.class);
     @Autowired
     private JobLauncher jobLauncher;
     @Autowired
@@ -25,11 +27,14 @@ public class JobController {
 
     @PostMapping("/importCycles")
     public void importCsvToDBJob() {
+        logger.info("Request received to execute importCycles job.");
         JobParameters jobParameters = new JobParametersBuilder()
                 .addLong("startAt", System.currentTimeMillis()).toJobParameters();
         try {
             jobLauncher.run(job, jobParameters);
+            logger.info("importCycles job execution completed successfully.");
         } catch (JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException | JobParametersInvalidException e) {
+            logger.error("Error executing the job: {}", e.getMessage());
             throw new JobExecutionException("Error executing the batch job: "+ e.getMessage());
         }
     }
