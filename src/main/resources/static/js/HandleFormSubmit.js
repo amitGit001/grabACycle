@@ -21,12 +21,12 @@ function handleUpdateCycleFormSubmit() {
 // registration form submit handler
 
 function handleRegistrationFormSubmit() {
-  let registrationForm = document.getElementById("registration-form");
+  let registrationForm = document.getElementById("registration-form").elements;
 
   let password = registrationForm.namedItem("password");
   let confirmPassword = registrationForm.namedItem("confirm-password");
 
-  if (password === confirmPassword) {
+  if (password.value === confirmPassword.value) {
     registrationForm.removeChild(confirmPassword);
     return true;
   } else {
