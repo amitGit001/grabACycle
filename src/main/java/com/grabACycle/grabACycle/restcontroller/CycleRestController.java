@@ -6,27 +6,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
-//@RestController
-//public class CycleController {
-//
-//
-//    @Autowired
-//    private CycleService cycleService;
-//
-//    @PostMapping("/cycle")
-//    public Cycle createCycle(@RequestBody Cycle cycle)
-//    {
-//        return cycleService.createCycle(cycle);
-//    }
-//
-//    @GetMapping("/cycle")
-//    public List<Cycle> getAllCycles()
-//    {
-//        return cycleService.fetchCycles();
-//    }
-//
+@RestController
+public class CycleRestController {
+
+
+    @Autowired
+    private CycleService cycleService;
+
+    @PostMapping("/cycle")
+    public Cycle createCycle(@RequestBody Cycle cycle)
+    {
+        return cycleService.createCycle(cycle);
+    }
+
+    @GetMapping("/cycle")
+    public List<Cycle> getAllCycles()
+    {
+        return cycleService.fetchCycles();
+    }
+
 //    @GetMapping("/cycle/{cycleId}")
 //    public Optional<Cycle> getCycleById(@PathVariable int cycleId)
 //    {
@@ -50,4 +49,4 @@ import java.util.Optional;
 //    {
 //        cycleService.deleteCycle(cycleId);
 //    }
-//}
+}
