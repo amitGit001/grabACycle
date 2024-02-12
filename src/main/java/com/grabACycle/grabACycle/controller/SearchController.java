@@ -18,6 +18,8 @@ import java.util.List;
 @Controller
 public class SearchController {
 
+    private int PAGE_SIZE=20;
+
     @Autowired
     private SearchService searchService;
 
@@ -30,7 +32,7 @@ public class SearchController {
                                  @ModelAttribute("keyword") String keyword)
     {
         System.out.println(keyword);
-        Page<Cycle> page = searchService.searchAllCyclesPaginated(pageNo, 15, sortField, sortDir, keyword);
+        Page<Cycle> page = searchService.searchAllCyclesPaginated(pageNo, PAGE_SIZE, sortField, sortDir, keyword);
         List<Cycle> listCycles = page.getContent();
         model.addAttribute("listCycles", listCycles);
         model.addAttribute("keyword", keyword);
@@ -54,7 +56,7 @@ public class SearchController {
                                  @PathVariable String keyword)
     {
         System.out.println(keyword);
-        Page<Cycle> page = searchService.searchAllCyclesPaginated(pageNo, 15, sortField, sortDir, keyword);
+        Page<Cycle> page = searchService.searchAllCyclesPaginated(pageNo, PAGE_SIZE, sortField, sortDir, keyword);
         List<Cycle> listCycles = page.getContent();
         model.addAttribute("listCycles", listCycles);
         model.addAttribute("keyword", keyword);

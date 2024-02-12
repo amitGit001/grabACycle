@@ -33,6 +33,9 @@
             th:action="@{'/createCycle?returnToPage=' + ${returnToPage} + '&sortField=' + ${sortField} + '&sortDir=' + ${sortDir}}"
           >
             <input type="hidden" th:field="*{id}" />
+            <input type="hidden" th:field="*{bookingStatus}" />
+            <input type="hidden" th:field="*{bookedByUserEmail}" />
+
             <input type="text" th:field="*{name}" placeholder="Cycle Name" />
             <input type="text" th:field="*{model}" placeholder="Cycle Model" />
             <input type="text" th:field="*{type}" placeholder="Cycle Type" />

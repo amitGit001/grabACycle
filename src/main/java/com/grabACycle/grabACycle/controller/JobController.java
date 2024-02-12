@@ -1,5 +1,6 @@
 package com.grabACycle.grabACycle.controller;
 
+import com.grabACycle.grabACycle.exception.exceptions.JobExecutionException;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
@@ -29,7 +30,7 @@ public class JobController {
         try {
             jobLauncher.run(job, jobParameters);
         } catch (JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException | JobParametersInvalidException e) {
-            e.printStackTrace();
+            throw new JobExecutionException("Error executing the batch job: "+ e.getMessage());
         }
     }
 }
