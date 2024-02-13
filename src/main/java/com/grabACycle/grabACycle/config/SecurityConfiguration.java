@@ -5,6 +5,7 @@ import com.grabACycle.grabACycle.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -38,6 +39,12 @@ public class SecurityConfiguration {
 
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/registration**", "/js/**", "/css/**", "/images/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/deleteCycle/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/createCycle**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/showNewCycleForm**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/showFormForUpdate/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/updateBookingStatus/**").hasRole("USER")
+
                 .anyRequest().authenticated());
 
         http.csrf().disable();
