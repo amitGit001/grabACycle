@@ -4,6 +4,7 @@ import com.grabACycle.grabACycle.dao.CycleRepository;
 import com.grabACycle.grabACycle.dao.UserRepository;
 import com.grabACycle.grabACycle.entity.Cycle;
 import com.grabACycle.grabACycle.entity.User;
+import com.grabACycle.grabACycle.exception.exceptions.CycleNotFoundException;
 import com.grabACycle.grabACycle.services.CycleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
@@ -32,8 +33,7 @@ public class CycleServiceImplementation implements CycleService {
 
     @Override
     @CachePut(cacheNames = "cycle")
-    public Cycle createCycle(Cycle cycle)
-    {
+    public Cycle createCycle(Cycle cycle) {
         Cycle tempCycle = new Cycle();
 
         tempCycle.setId(cycle.getId());
@@ -47,25 +47,20 @@ public class CycleServiceImplementation implements CycleService {
 
     @Override
     @Cacheable(cacheNames = "cycle")
-    public List<Cycle> fetchCycles()
-    {
+    public List<Cycle> fetchCycles() {
         return cycleRepository.findAll();
     }
 
     @Override
 //    @Cacheable(cacheNames = "cycle",unless="#result == null")
-    public Cycle fetchCycleById(int cycleId)
-    {
-        Optional<Cycle> optional=cycleRepository.findById(cycleId);
+    public Cycle fetchCycleById(int cycleId) {
+        Optional<Cycle> optional = cycleRepository.findById(cycleId);
 
-        Cycle cycle=null;
-        if(optional.isPresent())
-        {
-            cycle=optional.get();
-        }
-
-        else{
-            throw new RuntimeException("Cycle not found for id:"+cycleId);
+        Cycle cycle = null;
+        if (optional.isPresent()) {
+            cycle = optional.get();
+        } else {
+            throw new CycleNotFoundException("Cycle not found for id:" + cycleId);
         }
 
         return cycle;
@@ -73,8 +68,7 @@ public class CycleServiceImplementation implements CycleService {
 
     @Override
     @CachePut(cacheNames = "cycle")
-    public Cycle updateCycle(Cycle cycle)
-    {
+    public Cycle updateCycle(Cycle cycle) {
         Cycle tempCycle = new Cycle();
 
         tempCycle.setId(cycle.getId());
@@ -87,9 +81,9 @@ public class CycleServiceImplementation implements CycleService {
     }
 
     @Override
-    public Cycle updateCycleById(int cycleId, Cycle cycle)
-    {
-        Cycle tempCycle = cycleRepository.findById(cycleId).get();
+    public Cycle updateCycleById(int cycleId, Cycle cycle) {
+//        Cycle tempCycle = cycleRepository.findById(cycleId).get();
+        Cycle tempCycle = fetchCycleById(cycleId);
 
         tempCycle.setName(cycle.getName());
         tempCycle.setModel(cycle.getModel());
@@ -106,14 +100,13 @@ public class CycleServiceImplementation implements CycleService {
 
         Optional<User> user = Optional.ofNullable(userRepository.findByEmail(userEmail));
 
-        if(cycle.isPresent() && user.isPresent()){
+        if (cycle.isPresent() && user.isPresent()) {
 
-            Cycle tempCycle=cycle.get();
+            Cycle tempCycle = cycle.get();
 
             User tempUser = user.get();
 
-            if(!tempCycle.isBookingStatus())
-            {
+            if (!tempCycle.isBookingStatus()) {
                 tempCycle.setBookingStatus(true);
                 tempCycle.setBookedByUserEmail(tempUser.getEmail());
 
@@ -129,6 +122,7 @@ public class CycleServiceImplementation implements CycleService {
             return tempCycle;
         }
 
+
         return null;
 
 
@@ -136,9 +130,8 @@ public class CycleServiceImplementation implements CycleService {
 
     @Override
     @CacheEvict(cacheNames = "user", allEntries = true)
-    public void deleteCycleById(int cycleId)
-    {
-       cycleRepository.deleteById(cycleId);
+    public void deleteCycleById(int cycleId) {
+        cycleRepository.deleteById(cycleId);
     }
 
     @Override
@@ -146,7 +139,7 @@ public class CycleServiceImplementation implements CycleService {
         Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortField).ascending() :
                 Sort.by(sortField).descending();
 
-        Pageable pageable= PageRequest.of(pageNo-1, pageSize, sort);
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, sort);
 
         return cycleRepository.findAll(pageable);
     }

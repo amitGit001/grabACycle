@@ -44,7 +44,8 @@ public class Cycle {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "booked_by_email", referencedColumnName = "email", insertable = false, updatable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+//    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JsonIgnore
     private User bookedByUser;
 
     public String getBookedByUserEmail() {

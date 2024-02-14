@@ -63,7 +63,7 @@ public class UserServiceImplementation implements UserService {
     }
 
     @Override
-    @Cacheable(cacheNames = "user",unless="#result == null")
+//    @Cacheable(cacheNames = "user",unless="#result == null")
     public Optional<User> fetchUserById(int userId)
     {
         return userRepository.findById(userId);

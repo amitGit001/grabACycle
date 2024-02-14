@@ -26,6 +26,8 @@ function handleRegistrationFormSubmit() {
   let password = registrationForm.namedItem("password");
   let confirmPassword = registrationForm.namedItem("confirm-password");
 
+
+
   if (password.value === confirmPassword.value) {
     registrationForm.removeChild(confirmPassword);
     return true;
